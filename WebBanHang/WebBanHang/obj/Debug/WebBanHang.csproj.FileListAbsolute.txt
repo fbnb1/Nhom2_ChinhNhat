@@ -50,6 +50,6 @@ E:\OneDrive\ASUS K501LX\Documents\GitHub\Nhom2_ChinhNhat\WebBanHang\WebBanHang\b
 E:\OneDrive\ASUS K501LX\Documents\GitHub\Nhom2_ChinhNhat\WebBanHang\WebBanHang\bin\Microsoft.Owin.Security.Google.xml
 E:\OneDrive\ASUS K501LX\Documents\GitHub\Nhom2_ChinhNhat\WebBanHang\WebBanHang\bin\Microsoft.Owin.Security.Twitter.xml
 E:\OneDrive\ASUS K501LX\Documents\GitHub\Nhom2_ChinhNhat\WebBanHang\WebBanHang\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-E:\OneDrive\ASUS K501LX\Documents\GitHub\Nhom2_ChinhNhat\WebBanHang\WebBanHang\obj\Debug\WebBanHang.csprojResolveAssemblyReference.cache
 E:\OneDrive\ASUS K501LX\Documents\GitHub\Nhom2_ChinhNhat\WebBanHang\WebBanHang\obj\Debug\WebBanHang.dll
 E:\OneDrive\ASUS K501LX\Documents\GitHub\Nhom2_ChinhNhat\WebBanHang\WebBanHang\obj\Debug\WebBanHang.pdb
+E:\OneDrive\ASUS K501LX\Documents\GitHub\Nhom2_ChinhNhat\WebBanHang\WebBanHang\obj\Debug\WebBanHang.csprojResolveAssemblyReference.cache

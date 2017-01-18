@@ -210,6 +210,7 @@
     <Content Include="Areas\Admin\Resource\Scripts\custom.js" />
     <Content Include="Areas\Admin\Resource\Scripts\custom.min.js" />
     <Content Include="Areas\Admin\Resource\Scripts\datepicker\daterangepicker.js" />
+    <Content Include="Areas\Admin\Resource\Scripts\myScript.js" />
     <Content Include="Areas\Admin\Resource\Scripts\moment\moment.min.js" />
     <Content Include="Areas\Admin\Resource\Vendors\animate.css\animate.css" />
     <Content Include="Areas\Admin\Resource\Vendors\animate.css\animate.min.css" />
@@ -3592,7 +3593,6 @@
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Admin\Views\Category\List.cshtml" />
     <Content Include="Areas\Admin\Resource\Vendors\animate.css\.bower.json" />
     <Content Include="Areas\Admin\Resource\Vendors\animate.css\animate-config.json" />
     <Content Include="Areas\Admin\Resource\Vendors\animate.css\bower.json" />
@@ -4425,6 +4425,9 @@
     <Content Include="Areas\Admin\Resource\Vendors\validator\.bower.json" />
     <Content Include="Areas\Admin\Resource\Vendors\validator\README.md" />
     <Content Include="Areas\Admin\Resource\Vendors\validator\validator.jquery.json" />
+    <Content Include="Areas\Admin\Views\Category\List.cshtml" />
+    <Content Include="Areas\Admin\Views\Category\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\Category\Edit.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
