@@ -1,4 +1,4 @@
-namespace WebBanHang.Areas.Admin.Models
+﻿namespace WebBanHang.Areas.Admin.Models
 {
     using System;
     using System.Collections.Generic;
@@ -18,6 +18,7 @@ namespace WebBanHang.Areas.Admin.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
+        [Display(Name="Nhà cung cấp")]
         [StringLength(150)]
         public string Ten { get; set; }
 

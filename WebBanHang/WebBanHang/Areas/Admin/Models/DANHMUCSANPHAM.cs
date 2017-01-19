@@ -1,4 +1,4 @@
-namespace WebBanHang.Areas.Admin.Models
+﻿namespace WebBanHang.Areas.Admin.Models
 {
     using System;
     using System.Collections.Generic;
@@ -17,6 +17,7 @@ namespace WebBanHang.Areas.Admin.Models
 
         public int Id { get; set; }
 
+        [Display(Name="Tên danh mục")]
         [StringLength(150)]
         public string Ten { get; set; }
 

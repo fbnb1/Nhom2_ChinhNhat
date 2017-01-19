@@ -36,9 +36,11 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select class="form-control">
-                                <option>Chọn danh mục</option>
-                                <option>Option one</option>
-                                <option>Option two</option>
+                                <option> Chọn danh mục </option>
+                                @foreach (var item in ViewBag.ListCate)
+                                {
+                                    <option> @item </option>
+                                }
                             </select>
                         </div>
                     </div>
