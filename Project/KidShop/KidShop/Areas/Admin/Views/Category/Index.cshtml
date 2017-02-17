@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Kidshop.Areas.Admin.Models.DataModel.Category>
+@using Kidshop.Models.BusinessModel
+@{
+    KidShopDbContext db = new KidShopDbContext();
+}
+<p>
+    @Html.ActionLink("Thêm nhóm hàng", "Create", "Category", new { }, new { @class = "btn btn-primary" })
+</p>
+
+<div class="x_panel">
+    <div class="x_title">
+        <h2>Danh sách nhóm hàng</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li>
+                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li>
+                <a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="x_content">
+
+        <div class="table-responsive">
+            <table class="table table-striped jambo_table bulk_action">
+                <thead>
+                    <tr class="headings">
+                        <th>
+                            <input type="checkbox" id="check-all" class="flat">
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CategoryName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Order)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ParentId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CreateDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Status)
+                        </th>
+                        <th class="column-title no-link last">
+                            <span class="nobr">Hành động</span>
+                        </th>
+                        <th class="bulk-actions" colspan="7">
+                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="odd pointer">
+                            <td class="a-center ">
+                                <input type="checkbox" class="flat" name="table_records">
+                            </td>
+                            <td class=" ">@item.CategoryName</td>
+                            <td class=" ">@item.Description</td>
+                            <td class=" ">@item.Order</td>
+                            @{
+                                var getParent = db.Category.FirstOrDefault(x => x.CategoryId == item.ParentId);
+                            }
+                            @if (getParent == null) { <td class=" ">Không có</td> } else { <td class=" ">@getParent.CategoryName</td> }
+                            <td class=" ">@item.CreateDate</td>
+                            <td class=" ">@Html.CheckBox("cbx", item.Status, new { @class = "flat", disabled = "" })</td>
+                            <td class=" last">
+                                @Html.ActionLink("Sửa |", "Edit", new { id = item.CategoryId })
+                                @Html.ActionLink("Xóa", "Delete", new { id = item.CategoryId }, new { onclick = "return confirm('Bạn có chắc chắn muốn xóa?')" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

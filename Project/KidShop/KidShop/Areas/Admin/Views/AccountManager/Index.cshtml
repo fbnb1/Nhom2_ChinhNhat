@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Kidshop.Models.DataModel.Account>
+
+<p>
+    @Html.ActionLink("Thêm tài khoản", "Create", "AccountManager", new { }, new { @class = "btn btn-primary" })
+</p>
+
+<div class="x_panel">
+    <div class="x_title">
+        <h2>Danh sách tài khoản</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li>
+                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li>
+                <a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="x_content">
+
+        <div class="table-responsive">
+            <table class="table table-striped jambo_table bulk_action">
+                <thead>
+                    <tr class="headings">
+                        <th>
+                            <input type="checkbox" id="check-all" class="flat">
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Username)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FullName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Avatar)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.isAdmin)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Allowed)
+                        </th>
+                        <th class="column-title no-link last">
+                            <span class="nobr">Hành động</span>
+                        </th>
+                        <th class="bulk-actions" colspan="7">
+                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="odd pointer">
+                            <td class="a-center ">
+                                <input type="checkbox" class="flat" name="table_records">
+                            </td>
+                            <td class=" ">@item.Username</td>
+                            <td class=" ">@item.FullName</td>
+                            <td class=" ">@item.Email</td>
+                            <td class=" ">@item.Avatar</td>
+                            <td class=" ">@Html.CheckBox("cbx", item.isAdmin, new { @class = "flat", disabled = "" })</td>
+                            <td class=" ">@Html.CheckBox("cbx", item.Allowed, new { @class = "flat", disabled = "" })</td>
+                            <td class=" last">
+                                @Html.ActionLink("Sửa |", "Edit", new { id = item.UserId })
+                                @Html.ActionLink("Xóa", "Delete", new { id = item.UserId }, new { onclick = "return confirm('Bạn có chắc chắn muốn xóa?')" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
