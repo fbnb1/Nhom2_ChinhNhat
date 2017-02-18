@@ -34,9 +34,6 @@
                             @Html.DisplayNameFor(model => model.Category.CategoryName)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Description)
-                        </th>
-                        <th>
                             @Html.DisplayNameFor(model => model.Price)
                         </th>
                         <th>
@@ -66,10 +63,9 @@
                             </td>
                             <td class=" ">@item.ProductName</td>
                             <td class=" ">@item.Category.CategoryName</td>
-                            <td class=" ">@item.Description</td>
                             <td class=" ">@item.Price</td>
                             <td class=" ">@item.Qty</td>
-                            <td class=" ">@item.Image</td>
+                            <td class=" "><img src="~/Areas/Admin/Content/Images/Product/@item.Image" name="CurrentImage" class="img-rounded" width="50px" /></td>
                             <td class=" ">@Html.CheckBox("name", item.Status, new { @class = "flat", disabled = "" })</td>
                             <td class=" last">
                                 @Html.ActionLink("Sửa |", "Edit", new { id = item.ProductId })

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kidshop.Areas.Admin.Models.BusinessModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,7 +15,7 @@ namespace Kidshop.Areas.Admin.Models.DataModel
         [DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity)]
         public int ProductId { get; set; }
 
-        [Display(Name="Sản phẩm")]
+        [Display(Name="Tên sản phẩm")]
         [Column(TypeName="nvarchar")]
         [StringLength(256)]
         [Required(ErrorMessage="Vui lòng nhập tên sản phẩm")]

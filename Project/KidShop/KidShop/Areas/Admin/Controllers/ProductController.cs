@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Kidshop.Areas.Admin.Models.DataModel;
 using Kidshop.Models.BusinessModel;
+using System.IO;
 
 namespace Kidshop.Areas.Admin.Controllers
 {
@@ -43,10 +44,19 @@ namespace Kidshop.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductId,ProductName,Description,CategoryId,Price,Qty,Image,Status")] Product product)
+        [ValidateInput(false)]
+        public ActionResult Create([Bind(Include = "ProductId,ProductName,Description,CategoryId,Price,Qty,Status")] Product product, HttpPostedFileBase Image)
         {
             if (ModelState.IsValid)
             {
+
+                if (Image != null && Image.ContentLength > 0)
+                {
+                    string path = Path.Combine(Server.MapPath("~/Areas/Admin/Content/Images/Product"), Path.GetFileName(Image.FileName));
+                    Image.SaveAs(path);
+                    product.Image = Image.FileName;
+                }
+
                 db.Product.Add(product);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -73,11 +83,38 @@ namespace Kidshop.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProductId,ProductName,Description,CategoryId,Price,Qty,Image,Status")] Product product)
+        [ValidateInput(false)]
+        public ActionResult Edit([Bind(Include = "ProductId,ProductName,Description,CategoryId,Price,Image,Qty,Status")] Product product, HttpPostedFileBase Image)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(product).State = EntityState.Modified;
+                //Nếu người dùng thay đổi Image
+                if (Image != null && Image.ContentLength > 0)
+                {
+                    //Lấy tên file image cũ
+                    KidShopDbContext db2 = new KidShopDbContext();
+                    var currentImage = db2.Product.FirstOrDefault(x => x.ProductId == product.ProductId).Image;
+                    db2.Dispose();
+
+                    //Xóa image cũ
+                    string fullpath = Request.MapPath("~/Areas/Admin/Content/Images/Product/" + currentImage);
+                    if (System.IO.File.Exists(fullpath))
+                    {
+                        System.IO.File.Delete(fullpath);
+                    }
+
+                    //Lưu file image mới vào folder
+                    string path = Path.Combine(Server.MapPath("~/Areas/Admin/Content/Images/Product"), Path.GetFileName(Image.FileName));
+                    Image.SaveAs(path);
+                    product.Image = Image.FileName;
+                }
+                else
+                {
+                    //Nếu người dùng ko chọn Image thì Image sẽ giữ nguyên ko thay đổi
+                    db.Entry(product).Property(e => e.Image).IsModified = false;
+                }
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -88,6 +125,14 @@ namespace Kidshop.Areas.Admin.Controllers
         public ActionResult Delete(int id)
         {
             Product product = db.Product.Find(id);
+
+            //Xóa file image
+            string fullpath = Request.MapPath("~/Areas/Admin/Content/Images/Product/" + product.Image);
+            if (System.IO.File.Exists(fullpath))
+            {
+                System.IO.File.Delete(fullpath);
+            }
+
             db.Product.Remove(product);
             db.SaveChanges();
             return RedirectToAction("Index");
