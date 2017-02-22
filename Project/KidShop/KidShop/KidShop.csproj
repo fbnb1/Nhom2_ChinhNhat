@@ -3875,6 +3875,7 @@
     <Compile Include="Areas\Admin\Models\DataModel\ProductDetail.cs" />
     <Compile Include="Areas\Admin\Models\DataModel\ProductImage.cs" />
     <Compile Include="Areas\Admin\Models\ViewModel\AccountViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ViewModel\BigViewModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

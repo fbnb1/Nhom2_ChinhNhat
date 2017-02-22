@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Kidshop.Areas.Admin.Models.DataModel;
 using Kidshop.Models.BusinessModel;
 using System.IO;
+using Kidshop.Areas.Admin.Models.ViewModel;
 
 namespace Kidshop.Areas.Admin.Controllers
 {

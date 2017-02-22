@@ -65,7 +65,7 @@
                             <td class=" ">@item.Category.CategoryName</td>
                             <td class=" ">@item.Price</td>
                             <td class=" ">@item.Qty</td>
-                            <td class=" "><img src="~/Areas/Admin/Content/Images/Product/@item.Image" name="CurrentImage" class="img-rounded" width="50px" /></td>
+                            <td class=" "><img src="~/Areas/Admin/Content/Images/Product/@item.Image" id="Image" class="img-rounded" width="50px" /></td>
                             <td class=" ">@Html.CheckBox("name", item.Status, new { @class = "flat", disabled = "" })</td>
                             <td class=" last">
                                 @Html.ActionLink("Sửa |", "Edit", new { id = item.ProductId })

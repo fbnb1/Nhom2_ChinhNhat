@@ -7,8 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Kidshop.Models.BusinessModel;
-using Kidshop.Models.DataModel;
-using Kidshop.Models.ViewModel;
+using Kidshop.Areas.Admin.Models.DataModel;
+using Kidshop.Areas.Admin.Models.ViewModel;
 
 namespace KidShop.Areas.Admin.Controllers
 {

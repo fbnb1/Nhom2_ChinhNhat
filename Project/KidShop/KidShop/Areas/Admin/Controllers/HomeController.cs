@@ -1,6 +1,6 @@
 ﻿using Kidshop.Models.BusinessModel;
-using Kidshop.Models.DataModel;
-using Kidshop.Models.ViewModel;
+using Kidshop.Areas.Admin.Models.DataModel;
+using Kidshop.Areas.Admin.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

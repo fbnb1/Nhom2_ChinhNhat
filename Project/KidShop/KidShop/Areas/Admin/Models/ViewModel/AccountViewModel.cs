@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace Kidshop.Models.ViewModel
+namespace Kidshop.Areas.Admin.Models.ViewModel
 {
     public class RegisterViewModel
     {

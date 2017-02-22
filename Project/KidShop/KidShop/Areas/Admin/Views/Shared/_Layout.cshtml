@@ -28,7 +28,6 @@
     <script src="~/Areas/Admin/Content/Vendors/ckeditor/ckeditor.js"></script>
     <!-- Custom styling plus plugins -->
     <link href="~/Areas/Admin/Content/custom.min.css" rel="stylesheet">
-
     <!-- jQuery -->
     <script src="~/Areas/Admin/Content/Vendors/jquery/dist/jquery.min.js"></script>
 </head>
@@ -72,18 +71,10 @@
                                     </ul>
                                 </li>
                                 <li>
-                                    <a><i class="fa fa-edit"></i> Nhóm hàng <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li>@Html.ActionLink("Danh sách", "Index", "Category")</li>
-                                        <li>@Html.ActionLink("Thêm nhóm hàng", "Create", "Category")</li>
-                                    </ul>
+                                    <a href="~/Admin/Category/Index"><i class="fa fa-edit"></i> Nhóm hàng <span class="fa fa-chevron-down"></span></a>
                                 </li>
                                 <li>
-                                    <a><i class="fa fa-desktop"></i> Sản phẩm <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li>@Html.ActionLink("Danh sách", "Index", "Product")</li>
-                                        <li>@Html.ActionLink("Thêm sản phẩm", "Create", "Product")</li>
-                                    </ul>
+                                    <a href="~/Admin/Product/Index"><i class="fa fa-desktop"></i> Sản phẩm <span class="fa fa-chevron-down"></span></a>
                                 </li>
                                 <li>
                                     <a><i class="fa fa-table"></i> Tài khoản <span class="fa fa-chevron-down"></span></a>
@@ -366,7 +357,6 @@
         </div>
     </div>
     <!-- /compose -->
-
     <!-- Bootstrap -->
     <script src="~/Areas/Admin/Content/Vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- NProgress -->

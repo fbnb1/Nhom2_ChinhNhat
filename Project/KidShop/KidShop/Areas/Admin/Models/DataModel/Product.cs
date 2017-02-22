@@ -21,7 +21,7 @@ namespace Kidshop.Areas.Admin.Models.DataModel
         [Required(ErrorMessage="Vui lòng nhập tên sản phẩm")]
         public string ProductName { get; set; }
 
-        [Display(Name = "Thông tin")]
+        [Display(Name = "Nội dung")]
         [Column(TypeName = "nvarchar")]
         [StringLength(1000)]
         public string Description { get; set; }
@@ -30,12 +30,15 @@ namespace Kidshop.Areas.Admin.Models.DataModel
         public int? CategoryId { get; set; }
 
         [Display(Name = "Giá")]
+        [Required(ErrorMessage="Vui lòng nhập giá sản phẩm")]
+        [DisplayFormat(DataFormatString="c,0")]
         public double Price { get; set; }
 
         [Display(Name = "Số lượng")]
+        [Required(ErrorMessage="Vui lòng nhập số lượng sản phẩm")]
         public int Qty { get; set; }
 
-        [Display(Name="Hình ảnh")]
+        [Display(Name="Ảnh đại diện")]
         public string Image { get; set; }
 
         [Display(Name="Ẩn/Hiện")]

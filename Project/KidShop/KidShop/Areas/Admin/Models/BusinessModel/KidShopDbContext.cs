@@ -1,5 +1,4 @@
 ﻿using Kidshop.Areas.Admin.Models.DataModel;
-using Kidshop.Models.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
