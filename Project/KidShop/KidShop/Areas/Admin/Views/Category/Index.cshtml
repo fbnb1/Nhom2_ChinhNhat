@@ -3,8 +3,9 @@
 @{
     KidShopDbContext db = new KidShopDbContext();
 }
+
 <p>
-    @Html.ActionLink("Thêm nhóm hàng", "Create", "Category", new { }, new { @class = "btn btn-primary" })
+    <a href="/Admin/Category/Create" class="btn btn-primary btn-sm"><span class="fa fa-plus"></span> Thêm nhóm hàng</a>
 </p>
 
 <div class="x_panel">
@@ -60,7 +61,7 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr class="odd pointer">
+                        <tr class="odd pointer" id="category_@item.CategoryId">
                             <td class="a-center ">
                                 <input type="checkbox" class="flat" name="table_records">
                             </td>
@@ -74,8 +75,8 @@
                             <td class=" ">@item.CreateDate</td>
                             <td class=" ">@Html.CheckBox("cbx", item.Status, new { @class = "flat", disabled = "" })</td>
                             <td class=" last">
-                                @Html.ActionLink("Sửa |", "Edit", new { id = item.CategoryId })
-                                @Html.ActionLink("Xóa", "Delete", new { id = item.CategoryId }, new { onclick = "return confirm('Bạn có chắc chắn muốn xóa?')" })
+                                <a class="btn btn-primary btn-xs" href="/Admin/Category/Edit/@item.CategoryId"><i class="fa fa-edit"></i> Sửa</a>
+                                <a class="btn btn-danger btn-xs" onclick="DeleteConfirm(@item.CategoryId)"><i class="fa fa-trash"></i> Xóa</a>
                             </td>
                         </tr>
                     }
@@ -84,3 +85,26 @@
         </div>
     </div>
 </div>
+
+<script>
+    function DeleteConfirm(id) {
+        $.confirm({
+            title: 'Xác nhận xóa!',
+            content: 'Bạn có chắc chắn muốn xóa?',
+            buttons: {
+                OK: {
+                    text: 'Xóa',
+                    btnClass: 'btn-red',
+                    keys: ['enter', 'shift'],
+                    action: function () {
+                        $.ajax({ url: "/Category/Delete/" + id, method: "POST", success: $("#category_" + id).remove() });
+                    }
+                },
+                cancel: {
+                    text: 'Hủy',
+                    keys: ['esc']
+                }
+            }
+        });
+    }
+</script>

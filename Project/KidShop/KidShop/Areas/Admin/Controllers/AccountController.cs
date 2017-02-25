@@ -56,7 +56,7 @@ namespace KidShop.Areas.Admin.Controllers
                     Session["Username"] = rs_user.Username;
                     Session["FullName"] = rs_user.FullName;
                     Session["Avatar"] = rs_user.Avatar;
-                    return RedirectToAction("Index", "Category");
+                    return RedirectToAction("Index", "Product");
                 }
             }
         }

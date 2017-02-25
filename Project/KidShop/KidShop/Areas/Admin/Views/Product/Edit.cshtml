@@ -1,8 +1,11 @@
 ﻿@model Kidshop.Areas.Admin.Models.DataModel.Product
 
 <p>
-    @Html.ActionLink("Danh sách sản phẩm", "Index", "Product", new { }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Danh sách sản phẩm", "Index", "Product", new { }, new { @class = "btn btn-primary  btn-sm" })
 </p>
+
+<!-- Dropzone -->
+<link href="~/Areas/Admin/Content/Vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -25,48 +28,55 @@
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.HiddenFor(model => model.ProductId)
+                    @Html.HiddenFor(model => model.ProductId, new { @id = "productId" })
 
                     <div class="form-group">
                         @Html.LabelFor(model => model.CategoryId, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            @Html.DropDownList("CategoryId", null, new { @class = "form-control col-md-7 col-xs12" })
+                            @Html.DropDownList("CategoryId", null, new { @class = "form-control col-md-7 col-xs-12" })
                             @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.ProductName, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            @Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control col-md-7 col-xs12", required = "required" } })
+                            @Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control col-md-7 col-xs-12", required = "required" } })
                             @Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control col-md-7 col-xs12", @id = "description" })
-                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.Price, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control col-md-7 col-xs12" } })
+                            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control col-md-7 col-xs-12" } })
                             @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.Qty, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control col-md-7 col-xs12" } })
+                            @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control col-md-7 col-xs-12" } })
                             @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.Image, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control col-md-7 col-xs12", type = "file" } })
+                            <img src="~/Areas/Admin/Content/Images/Product/@Model.Image" class="col-md-3 col-xs-3 col-sm-3" id="avatar"/>
+                            @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control col-md-7 col-xs-12", type = "file", onchange = "readURL(this);" } })
                             @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Ảnh chi tiết", new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div id="dropzoneForm" class="dropzone dz-clickable col-md-12 col-xs-12"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control col-md-7 col-xs-12", @id = "description" })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-group">
@@ -87,7 +97,93 @@
         </div>
     </div>
 </div>
+<!-- Dropzone.js -->
+<script src="~/Areas/Admin/Content/Vendors/dropzone/dist/min/dropzone.min.js"></script>
 
-<script>
+<!--Custom DropzoneJS-->
+<script type="text/javascript">
     CKEDITOR.replace('description');
+    Dropzone.options.dropzoneForm = {
+        paramName: "file",
+        maxFilesize: 2,
+        maxFiles: 8,
+        url: "/Product/UploadFile",
+        acceptedFiles: "image/*",
+        init: function () {
+            var thisDropzone = this;
+            this.on("maxfilesexceeded", function (file) {
+                this.removeFile(file);
+                $.alert({
+                    title: 'Rất tiếc!',
+                    content: 'Giới hạn số lượng hình ảnh là 8!'
+                });
+            });
+            var productId = $('#productId').val();
+            $.getJSON("/Admin/Product/GetListImageDetail/" + productId).done(function (data) {
+                if (data.Data != '') {
+                    $.each(data.Data, function (index, item) {
+                        //// Create the mock file:
+                        var url = 'http://'+$(location).attr('host') + '/Areas/Admin/Content/Images/ProductImages/' + item.FileName;
+                        var mockFile = {
+                            name: item.FileName,
+                            accepted: true,
+                            size: 12345,
+                            kind: 'image'
+                        };
+                        // Call the default addedfile event handler
+                        thisDropzone.emit("addedfile", mockFile);
+                        thisDropzone.files.push(mockFile);
+                        thisDropzone.createThumbnailFromUrl(mockFile, url, function () {
+                            thisDropzone.emit("complete", mockFile);
+                        }, "anonymous");
+                    });
+                }
+            });
+        },
+        dictDefaultMessage: "Kéo ảnh vào đây hoặc click để upload ảnh sản phẩm",
+        addRemoveLinks: true,
+        dictRemoveFile: 'Xóa ảnh',
+        removedfile: function (file) {
+            var name = file.name;
+            $.ajax({
+                type: 'POST',
+                url: '/Product/DeleteFileImage_Edit',
+                data: "id=" + name
+            });
+            var _ref;
+            return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+        }
+    }
+</script>
+<!--CK Editor-->
+<script type="text/javascript">
+    CKEDITOR.replace('description');
+</script>
+
+<script type="text/javascript">
+    $(window).bind("load", function () {
+        $.ajax({
+            type: 'GET',
+            url: '/Product/Load'
+        });
+    });
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#avatar')
+                    .attr('src', e.target.result)
+                    .width(150);
+                $('#avatar')
+                    .removeAttr("hidden");
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            $('#avatar')
+                    .attr("hidden", "hidden");
+        }
+    }
 </script>
