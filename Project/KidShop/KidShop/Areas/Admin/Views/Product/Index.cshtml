@@ -1,17 +1,9 @@
 ﻿@model IEnumerable<Kidshop.Areas.Admin.Models.DataModel.Product>
 
-<!-- Jquery UI -->
-<link href="~/Areas/Admin/Content/Vendors/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
-
-<div class="row">
-    <div class="col-md-5 col-sm-5 col-xs-5">
-        <a href="/Admin/Product/Create" class="btn btn-primary btn-sm"><span class="fa fa-plus"></span> Thêm sản phẩm</a>
-        <a href="#" class="btn btn-info btn-sm"><span class="fa fa-barcode"></span> In mã sản phẩm</a>
-    </div>
-    <div class="col-md-7 col-sm-7 col-xs-7">
-        <input type="text" placeholder="Tìm kiếm | Nhập tên hoặc mã sản phẩm" class="form-control input-sm" id="txtsearch" />
-    </div>
-</div>
+<p>
+    <a href="/Admin/Product/Create" class="btn btn-primary btn-sm"><span class="fa fa-plus"></span> Thêm sản phẩm</a>
+    <a href="#" class="btn btn-info btn-sm"><span class="fa fa-barcode"></span> In mã sản phẩm</a>
+</p>
 
 <div class="x_panel">
     <div class="x_title">
@@ -28,16 +20,7 @@
     </div>
 
     <div class="x_content">
-        <div>
-            <span id="pageInfo"></span>
-            <ul id="pagination" class="pagination1">
-                <li id="goPrevious"> <a href="#Previous"><i class="fa fa-chevron-left"></i></a> </li>
-                <li id="goNext"> <a href="#Next"><i class="fa fa-chevron-right"></i></a> </li>
-            </ul>
-        </div>
-        <div class="clearfix">
 
-        </div>
         <div class="table-responsive">
             <table class="table table-striped jambo_table bulk_action">
                 <thead>
@@ -47,9 +30,6 @@
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.ProductName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ProductId)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.Category.CategoryName)
@@ -74,98 +54,52 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody id="paging">
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="odd pointer" id="product_@item.ProductId">
+                            <td class="a-center ">
+                                <input type="checkbox" class="flat" name="table_records">
+                            </td>
+                            <td class=" ">@item.ProductName</td>
+                            <td class=" ">@item.Category.CategoryName</td>
+                            <td class=" ">@item.Price</td>
+                            <td class=" ">@item.Qty</td>
+                            <td class=" "><img src="~/Areas/Admin/Content/Images/Product/@item.Image" id="Image" class="img-rounded" width="35px" /></td>
+                            <td class=" ">@Html.CheckBox("name", item.Status, new { @class = "flat", disabled = "" })</td>
+                            <td class=" last">
+                                <a class="btn btn-primary btn-xs"  href="/Admin/Product/Edit/@item.ProductId"><i class="fa fa-edit"></i> Sửa</a>
+                                @*@Html.ActionLink("Sửa ", "Edit", new { id = item.ProductId }, new { @class = "btn btn-primary btn-xs" })*@
+                                <a class="btn btn-danger btn-xs" onclick="DeleteConfirm(@item.ProductId)"><i class="fa fa-trash"></i> Xóa</a>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-<style>
-    /* Pagination */
-    .pagination1{
-        list-style-type: none;
-        float: right;
-    }
-    .pagination1 li{
-        height: 30px;
-        width: 30px;
-        float: left;
-        margin-left: 8px;
-        text-align: center;
-        border-radius: 2px;
-        cursor: pointer;
-    }
-    .pagination1 li a{
-        line-height: 30px;
-        font-weight: bold;
-    }
-    .pagination1 .active{
-        background-color: rgba(52,73,94,0.94);
-    }
-    .pagination1 .active a{
-        color: #fff;
-    }
-    #pageInfo{
-        height: 30px;
-        line-height: 30px;
-        float: left;
-        font-weight: bold;
-    }
-
-    /* Custom autocomplete */
-    .ui-widget-content .ui-state-active {
-        color: #000;
-        background: rgba(231, 231, 231, 0.41);
-        margin-left: 0.5px;
-        border: none;
-    }
-    .ui-menu-item-wrapper {
-        height: 50px;
-    }
-</style>
-
-<!-- Autocomplete Search Product -->
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#txtsearch').autocomplete({
-            minLength: 1,
-            select: function (event, ui) {
-                var url = 'http://'+window.location.host+'/Admin/Product/Edit/'+ui.item.ProductId;
-                window.location.assign(url.toString());
-                console.log(url);
-                return false;
-            },
-            source: function (request, response) {
-                $.ajax({
-                    url: '/Admin/Product/SearchProduct',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: { key:request.term },
-                    success: function (data) {
-                        response(data.Data);
+<script>
+    function DeleteConfirm(id) {
+        $.confirm({
+            title: 'Xác nhận xóa!',
+            content: 'Bạn có chắc chắn muốn xóa?',
+            buttons: {
+                OK: {
+                    text: 'Xóa',
+                    btnClass: 'btn-red',
+                    keys: ['enter', 'shift'],
+                    action: function () {
+                        $.ajax({ url: "/Product/Delete/" + id, method: "POST", success: $("#product_" + id).remove() });
                     }
-                });
-            },
-        })
-        .autocomplete('instance')._renderItem = function (ul, item) {
-            var add = '';
-            add += '<div class="col-md-9 col-sm-6 col-xs-12">';
-            add += '<span class="col-md-12 col-sm-12 col-xs-12"><b>' + item.ProductName + '</b></span>';
-            add += '<span class="col-md-12 col-sm-12 col-xs-12">' + item.ProductId + '</span>';
-            add += '</div>';
-            add += '<div class="col-md-3  col-sm-6 col-xs-12">';
-            add += '<span class="col-md-12 col-sm-12 col-xs-12"><i class="fa fa-usd"></i>: ' + item.Price + '</span>';
-            add += '<span class="col-md-12 col-sm-12 col-xs-12"><i class="fa fa-sort-numeric-desc"></i>: ' + item.Qty + '</span>';
-            add += '</div>';
-            return $('<li>')
-                .append(add)
-                .appendTo(ul);
-        }
-    });
+                },
+                cancel: {
+                    text: 'Hủy',
+                    keys: ['esc']
+                }
+            }
+        });
+    }
 </script>
-
-<!-- Jquery UI -->
-<script src="~/Areas/Admin/Content/Vendors/jquery-ui/jquery-ui.min.js"></script>
-<!-- Pagination -->
-<script src="~/Areas/Admin/Content/jquery-paginate.js"></script>

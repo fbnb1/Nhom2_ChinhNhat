@@ -13,7 +13,6 @@ namespace Kidshop.Areas.Admin.Models.DataModel
     {
         [Key]
         [DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity)]
-        [Display(Name="Mã sản phẩm")]
         public int ProductId { get; set; }
 
         [Display(Name="Tên sản phẩm")]

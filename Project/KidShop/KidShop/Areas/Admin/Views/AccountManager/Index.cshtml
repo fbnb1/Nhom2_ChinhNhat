@@ -64,7 +64,7 @@
                             <td class=" ">@item.Username</td>
                             <td class=" ">@item.FullName</td>
                             <td class=" ">@item.Email</td>
-                            <td class=" "><img src="~/Areas/Admin/Content/Images/@item.Avatar" id="Image" class="img-rounded" style="margin-left:20px; width: 25px;" /></td>
+                            <td class=" ">@item.Avatar</td>
                             <td class=" ">@Html.CheckBox("cbx", item.isAdmin, new { @class = "flat", disabled = "" })</td>
                             <td class=" ">@Html.CheckBox("cbx", item.Allowed, new { @class = "flat", disabled = "" })</td>
                             <td class=" last">
