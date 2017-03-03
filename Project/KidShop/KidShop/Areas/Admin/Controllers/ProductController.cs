@@ -21,9 +21,9 @@ namespace Kidshop.Areas.Admin.Controllers
 
 
         /*--------------------------------INDEX-----------------------------------*/
-        public ActionResult Index()
+        public ActionResult Index(int page = 1, int pageSize = 10)
         {
-            var product = db.Product.Include(p => p.Category);
+            var product = db.Product.OrderByDescending(m => m.ProductId).Include(p => p.Category).Skip((page-1)*pageSize).Take(pageSize);
             return View(product.ToList());
         }
 
@@ -136,9 +136,11 @@ namespace Kidshop.Areas.Admin.Controllers
                     }
 
                     //Lưu file image mới vào folder
-                    string path = Path.Combine(Server.MapPath("~/Areas/Admin/Content/Images/Product"), Path.GetFileName(Image.FileName));
+                    string extensionFile = Image.FileName.Substring(Image.FileName.LastIndexOf("."));
+                    string newfilename = Common.EncryptMD5(DateTime.Now.ToBinary().ToString()) + extensionFile;
+                    string path = Path.Combine(Server.MapPath("~/Areas/Admin/Content/Images/Product"), Path.GetFileName(newfilename));
                     Image.SaveAs(path);
-                    product.Image = Image.FileName;
+                    product.Image = newfilename;
                 }
                 else
                 {
@@ -196,6 +198,7 @@ namespace Kidshop.Areas.Admin.Controllers
 
 
         /*--------------------------------DELETE-----------------------------------*/
+        [HttpPost]
         public bool Delete(int id)
         {
             //Xóa file image detail
@@ -294,6 +297,66 @@ namespace Kidshop.Areas.Admin.Controllers
             fileUpload = null;
             Session["fileUpload"] = null;
         }
+
+        /*************************** PHÂN TRANG SẢN PHẨM ************************/
+        // Lấy tổng số trang
+        public JsonResult Count(int items)
+        {
+            int rows = db.Product.Count();
+            float temp = (float)rows / items;
+            int sum = (temp - (int)temp != 0) ? (int)temp + 1 : (int)temp;
+            return Json(new { total = sum}, JsonRequestBehavior.AllowGet);
+        }
+
+        // Lấy danh sách sản phẩm
+        [HttpPost]
+        public JsonResult GetAllProduct(int page = 1, int pageSize = 10)
+        {
+            var product = db.Product.OrderByDescending(m => m.ProductId).Include(p => p.Category).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            return Json(new
+            {
+                Data = product.Select(x => new
+                {
+                    ProductId = x.ProductId,
+                    ProductName = x.ProductName,
+                    CategoryName = x.Category.CategoryName,
+                    Price = x.Price,
+                    Qty = x.Qty,
+                    Image = x.Image,
+                    Status = x.Status
+                })
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        // Lấy sản phẩm sau sản phẩm có Id truyền vào
+        public JsonResult GetNextProduct(int lastId)
+        {
+            var rs = db.Product.Include(x => x.Category).OrderByDescending(x => x.ProductId).Where(x => x.ProductId < lastId).Take(1);
+            return Json(new
+            {
+                Data = rs.Select(x => new
+                {
+                    ProductId = x.ProductId,
+                    ProductName = x.ProductName,
+                    CategoryName = x.Category.CategoryName,
+                    Price = x.Price,
+                    Qty = x.Qty,
+                    Image = x.Image,
+                    Status = x.Status
+                })
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        //  Search product
+        public JsonResult SearchProduct(string key)
+        {
+            var rs = db.Product.Select(x => new { x.ProductId, x.ProductName, x.Price, x.Qty }).Where(w => w.ProductName.Contains(key) || w.ProductId.ToString().Contains(key)).Take(5).ToList();
+            return Json(new { Data = rs }, JsonRequestBehavior.AllowGet);
+        }
+
+
 
         protected override void Dispose(bool disposing)
         {

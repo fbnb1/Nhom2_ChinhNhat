@@ -20,3 +20,11 @@ E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\System.Web.Mvc.x
 E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\obj\Debug\KidShop.dll
 E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\obj\Debug\KidShop.pdb
 E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\obj\Debug\KidShop.csprojResolveAssemblyReference.cache
+E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\Newtonsoft.Json.dll
+E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\System.Net.Http.Formatting.dll
+E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\Newtonsoft.Json.xml
+E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\System.Net.Http.Formatting.xml
+E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\System.Web.Http.dll
+E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\System.Web.Http.WebHost.dll
+E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\System.Web.Http.xml
+E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\System.Web.Http.WebHost.xml

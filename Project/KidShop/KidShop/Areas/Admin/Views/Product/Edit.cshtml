@@ -61,8 +61,10 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.Image, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <img src="~/Areas/Admin/Content/Images/Product/@Model.Image" class="col-md-3 col-xs-3 col-sm-3" id="avatar"/>
-                            @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control col-md-7 col-xs-12", type = "file", onchange = "readURL(this);" } })
+                            <div class="image view view-first" id="div_avatar" style="border: 1px solid #ccc;">
+                                <img style="padding: 10px; width: 150px; display: block; margin: auto;" id="avatar" src="~/Areas/Admin/Content/Images/Product/@Model.Image" />
+                            </div>
+                            @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control col-md-7 col-xs-12", type = "file", onchange = "readURL(this);", style = "display:none;" } })
                             @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -139,6 +141,9 @@
                     });
                 }
             });
+            this.on("success", function (file) {
+                $('.dz-image').css({ "border-radius": "0px" });
+            });
         },
         dictDefaultMessage: "Kéo ảnh vào đây hoặc click để upload ảnh sản phẩm",
         addRemoveLinks: true,
@@ -176,14 +181,14 @@
                 $('#avatar')
                     .attr('src', e.target.result)
                     .width(150);
-                $('#avatar')
-                    .removeAttr("hidden");
+                $('#div_avatar')
+                    .attr('style', "border: 1px solid #ccc");
             };
-
             reader.readAsDataURL(input.files[0]);
-        } else {
-            $('#avatar')
-                    .attr("hidden", "hidden");
         }
     }
+
+    $("#div_avatar").click(function () {
+        $('#Image').trigger('click');
+    });
 </script>
