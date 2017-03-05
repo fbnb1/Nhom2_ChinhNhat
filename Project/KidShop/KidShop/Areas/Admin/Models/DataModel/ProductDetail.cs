@@ -23,7 +23,7 @@ namespace Kidshop.Areas.Admin.Models.DataModel
         public string Size { get; set; }
 
         [Display(Name = "Màu sắc")]
-        [Column(TypeName = "varchar")]
+        [Column(TypeName = "nvarchar")]
         [StringLength(10)]
         public string Color { get; set; }
 

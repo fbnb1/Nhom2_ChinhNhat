@@ -1,11 +1,12 @@
 ﻿@model Kidshop.Areas.Admin.Models.DataModel.Product
-
+@{
+}
 <p>
     @Html.ActionLink("Danh sách sản phẩm", "Index", "Product", new { }, new { @class = "btn btn-primary  btn-sm" })
 </p>
 
 <!-- Dropzone -->
-<link href="~/Areas/Admin/Content/Vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+<link href="~/Areas/Admin/Content/Vendors/dropzone/dropzone.min.css" rel="stylesheet" />
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -32,7 +33,7 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.CategoryId, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                @Html.DropDownList("CategoryId", null, new { @class = "form-control col-md-7 col-xs12", required = "required" })
+                                @Html.DropDownListFor(model => model.CategoryId, null, null, new { @class = "form-control col-md-7 col-xs12", required = "required" })
                                 @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -51,22 +52,18 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Qty, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control col-md-7 col-xs12", required = "" } })
-                                @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        <div class="form-group">
                             @Html.LabelFor(model => model.Image, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <img class="col-md-3 col-xs-3 col-sm-3" id="avatar" hidden="hidden" style="border-radius: 25px;" />
-                                @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control col-md-7 col-xs12 file", type = "file", required = "", onchange = "readURL(this);" } })
+                                <div class="image view view-first" id="div_avatar" style="height: 60px; border: 1px solid #ccc">
+                                    <img style="width: 100%; display: block; margin: auto" id="avatar" />
+                                    <span style="line-height: 60px;" id="spanImg">Click để chọn file</span>
+                                </div>
+                                <div class="hidden">@Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control col-md-7 col-xs-12 file", type = "file", required = "", onchange = "readURL(this);" }, style = "display:none;" })</div>
                                 @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="form-group">
-                            @Html.Label("Ảnh chi tiết", new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
+                            @Html.Label("Ảnh sản phẩm", new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <div id="dropzoneForm" class="dropzone dz-clickable col-md-12 col-xs-12"></div>
                             </div>
@@ -74,14 +71,30 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control col-md-7 col-xs12", @id = "description" })
+                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control col-md-7 col-xs-12", @id = "description" })
                                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Thuộc tính sản phẩm", new { @class = "control-label col-md-3 col-sm-3 col-xs-12" })
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="col-md-6 col-xs-12" style="margin: 0px; padding: 0px;">
+                                    <input type="text" class="form-control col-md-5 col-xs-12 tags" id="tags_color" name="tags_color" />
+                                </div>
+                                <div class="col-md-6 col-xs-12" style="margin: 0px; padding: 0px;">
+                                    <input type="text" class="form-control col-md-5 col-xs-12 tags" id="tags_size" name="tags_size" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-3 col-md-6 col-sm-6 col-xs-12" id="product-detail">
+
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-md-offset-3 col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
                                 @Html.CheckBoxFor(model => model.Status, new { @class = "flat col-md-7 col-xs-12", @checked = "" })
-                                @Html.Label(" Ẩn/Hiện", new { @class = "control-label" })
+                                @Html.Label(" Ẩn/Hiện sản phẩm", new { @class = "control-label" })
                             </div>
                         </div>
                         <div class="ln_solid"></div>
@@ -100,10 +113,66 @@
 </div>
 
 <!-- Dropzone.js -->
-<script src="~/Areas/Admin/Content/Vendors/dropzone/dist/min/dropzone.min.js"></script>
+<script src="~/Areas/Admin/Content/Vendors/dropzone/dropzone.min.js"></script>
+<!-- Jquery Tags Input -->
+<script src="~/Areas/Admin/Content/Vendors/jquery-tagsinput/jquery.tagsinput.js"></script>
 
+<!-- Include CKEditor -->
 <script>
-    CKEDITOR.replace('description');
+    $(document).ready(function () {
+        CKEDITOR.replace('description');
+    });
+</script>
+
+<!-- jQuery Tags Input -->
+<script>
+    $(document).ready(function () {
+        $('#tags_size').tagsInput({
+            width: 'auto',
+            height: 80,
+            minInputWidth: 250,
+            defaultText: 'Nhập và Enter để thêm size',
+            onAddTag: function (e) {
+                tagsChange();
+            },
+            onRemoveTag: function (e) {
+                tagsChange();
+            }
+        });
+        $('#tags_color').tagsInput({
+            width: 'auto',
+            height: 80,
+            minInputWidth: 250,
+            defaultText: 'Nhập và Enter để thêm màu',
+            onAddTag: function (e) {
+                tagsChange();
+            },
+            onRemoveTag: function (e) {
+                tagsChange();
+            }
+        });
+        function tagsChange() {
+            var color = $("#tags_color").val();
+            var size = $("#tags_size").val();
+            var price = $('#Price').val();
+            color = color.split(',');
+            size = size.split(',');
+            $('#product-detail').children().remove();
+            for (var i = 0; i < color.length; i++) {
+                for (var j = 0; j < size.length; j++) {
+                    var item = '<div class="col-md-12" style="padding: 0px; margin:0px;"><div class="col-md-4" style="line-height: 34px; padding: 0px; margin: 0px;"><span class="label label-success">' + (color[i] + ' ' + size[j]).trim() + '</span></div><div class="col-md-4" style="padding: 0px; margin:0px;"><input type="text" class="form-control" placeholder="Giá sản phẩm" value="'+price+'" name="price_detail[]"/></div><div class="col-md-4" style="padding: 0px; margin:0px;"><input type="text" class="form-control" placeholder="Số lượng" name="qty_detail[]"/></div></div>';
+                    if (size[i] != '' || color[j] != '') {
+                        $(item).appendTo($('#product-detail'));
+                    }
+                }
+            }
+        }
+    });
+</script>
+<!-- /jQuery Tags Input -->
+
+<!-- DropzoneJs Config -->
+<script>
     Dropzone.options.dropzoneForm = {
         paramName: "file",
         maxFilesize: 2,
@@ -117,6 +186,9 @@
                     title: 'Rất tiếc!',
                     content: 'Giới hạn số lượng hình ảnh là 8!'
                 });
+            });
+            this.on("success", function (file) {
+                $('.dz-image').css({ "border-radius": "0px" });
             });
         },
         dictDefaultMessage: "Kéo ảnh vào đây hoặc click để upload ảnh sản phẩm",
@@ -133,31 +205,26 @@
             return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
         }
     }
-    $(window).bind("load", function () {
-        $.ajax({
-            type: 'GET',
-            url: '/Product/Load'
-        });
-    });
+</script>
 
-
+<!-- Input Avatar Image -->
+<script>
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
-
             reader.onload = function (e) {
                 $('#avatar')
                     .attr('src', e.target.result)
                     .width(150);
-                $('#avatar')
-                    .removeAttr("hidden");
+                $('#div_avatar')
+                    .attr('style', "border: 1px solid #ccc; padding: 10px");
+                $('#spanImg').remove();
             };
-
             reader.readAsDataURL(input.files[0]);
-        } else {
-            $('#avatar')
-                    .attr("hidden","hidden");
         }
     }
 
+    $("#div_avatar").click(function () {
+        $('#Image').trigger('click');
+    });
 </script>

@@ -10,6 +10,7 @@ using Kidshop.Areas.Admin.Models.DataModel;
 using Kidshop.Models.BusinessModel;
 using System.IO;
 using Kidshop.Areas.Admin.Models.ViewModel;
+using Kidshop.Areas.Admin.Models.BusinessModel;
 
 namespace Kidshop.Areas.Admin.Controllers
 {
@@ -21,9 +22,9 @@ namespace Kidshop.Areas.Admin.Controllers
 
 
         /*--------------------------------INDEX-----------------------------------*/
-        public ActionResult Index()
+        public ActionResult Index(int page = 1, int pageSize = 10)
         {
-            var product = db.Product.Include(p => p.Category);
+            var product = db.Product.OrderByDescending(m => m.ProductId).Include(p => p.Category).Skip((page-1)*pageSize).Take(pageSize);
             return View(product.ToList());
         }
 
@@ -31,7 +32,10 @@ namespace Kidshop.Areas.Admin.Controllers
         /*--------------------------------CREATE-GET-----------------------------------*/
         public ActionResult Create()
         {
-            ViewBag.CategoryId = new SelectList(db.Category, "CategoryId", "CategoryName");
+            List<GetCategory> Cate = new List<GetCategory>() { 
+                new GetCategory(){ CategoryId = 0, CategoryName = "Vui lòng chọn nhóm hàng cha" }
+            };
+            ViewBag.CategoryId = new SelectList(new GetCategory().getCategory(0, "", Cate), "CategoryId", "CategoryName");
             return View();
         }
 
@@ -40,19 +44,29 @@ namespace Kidshop.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Create([Bind(Include = "ProductId,ProductName,Description,CategoryId,Price,Qty,Status")] Product product, HttpPostedFileBase Image)
+        public ActionResult Create(/*[Bind(Include = "ProductId,ProductName,Description,CategoryId,Price,Qty,Status")]*/ Product product, HttpPostedFileBase Image)
         {
             if (ModelState.IsValid)
             {
-                //Lưu ảnh đại diện sản phẩm
-                if (Image != null && Image.ContentLength > 0)
+                var price_detail = Request.Form["price_detail[]"].Split(',');
+                var qty_detail = Request.Form["qty_detail[]"].Split(',');
+                var tags_size = Request.Form["tags_size"].Split(',');
+                var tags_color = Request.Form["tags_color"].Split(',');
+
+                for (int i = 0; i < qty_detail.Length; i++)
                 {
-                    string extensionFile = Image.FileName.Substring(Image.FileName.LastIndexOf("."));
-                    string newfilename = Common.EncryptMD5(DateTime.Now.ToBinary().ToString()) + extensionFile;
-                    string path = Path.Combine(Server.MapPath("~/Areas/Admin/Content/Images/Product"), newfilename);
-                    Image.SaveAs(path);
-                    product.Image = newfilename;
+                    product.Qty += Convert.ToInt16(qty_detail[i]);
                 }
+
+                    //Lưu ảnh đại diện sản phẩm
+                    if (Image != null && Image.ContentLength > 0)
+                    {
+                        string extensionFile = Image.FileName.Substring(Image.FileName.LastIndexOf("."));
+                        string newfilename = Common.EncryptMD5(DateTime.Now.ToBinary().ToString()) + extensionFile;
+                        string path = Path.Combine(Server.MapPath("~/Areas/Admin/Content/Images/Product"), newfilename);
+                        Image.SaveAs(path);
+                        product.Image = newfilename;
+                    }
 
                 //Lưu ảnh detail sản phẩm vào server
                 List<string> listFileName = new List<string>();
@@ -87,6 +101,26 @@ namespace Kidshop.Areas.Admin.Controllers
                     db.ProductImage.Add(a);
                 }
                 db.SaveChanges();
+
+                //Lưu chi tiết sản phẩm
+                int temp = 0;
+                for (int i = 0; i < tags_color.Length; i++)
+                {
+                    for (int j = 0; j < tags_size.Length; j++)
+                    {
+                        db.ProductDetail.Add(new ProductDetail()
+                        {
+                            Color = tags_color[i],
+                            Size = tags_size[j],
+                            Price = Convert.ToDouble(price_detail[temp]),
+                            Qty = Convert.ToInt16(qty_detail[temp]),
+                            ProductId = lastProductId
+                        });
+                        temp++;
+                    }
+                }
+                db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
             ViewBag.CategoryId = new SelectList(db.Category, "CategoryId", "CategoryName", product.CategoryId);
@@ -105,8 +139,11 @@ namespace Kidshop.Areas.Admin.Controllers
             if (product == null)
             {
                 return HttpNotFound();
-            }
-            ViewBag.CategoryId = new SelectList(db.Category, "CategoryId", "CategoryName", product.CategoryId);
+            } 
+            List<GetCategory> Cate = new List<GetCategory>() { 
+                new GetCategory(){ CategoryId = 0, CategoryName = "Vui lòng chọn nhóm hàng cha" }
+            };
+            ViewBag.CategoryId = new SelectList(new GetCategory().getCategory(0, "", Cate), "CategoryId", "CategoryName", product.CategoryId);
             return View(product);
         }
 
@@ -136,9 +173,11 @@ namespace Kidshop.Areas.Admin.Controllers
                     }
 
                     //Lưu file image mới vào folder
-                    string path = Path.Combine(Server.MapPath("~/Areas/Admin/Content/Images/Product"), Path.GetFileName(Image.FileName));
+                    string extensionFile = Image.FileName.Substring(Image.FileName.LastIndexOf("."));
+                    string newfilename = Common.EncryptMD5(DateTime.Now.ToBinary().ToString()) + extensionFile;
+                    string path = Path.Combine(Server.MapPath("~/Areas/Admin/Content/Images/Product"), Path.GetFileName(newfilename));
                     Image.SaveAs(path);
-                    product.Image = Image.FileName;
+                    product.Image = newfilename;
                 }
                 else
                 {
@@ -196,6 +235,7 @@ namespace Kidshop.Areas.Admin.Controllers
 
 
         /*--------------------------------DELETE-----------------------------------*/
+        [HttpPost]
         public bool Delete(int id)
         {
             //Xóa file image detail
@@ -294,6 +334,66 @@ namespace Kidshop.Areas.Admin.Controllers
             fileUpload = null;
             Session["fileUpload"] = null;
         }
+
+        /*************************** PHÂN TRANG SẢN PHẨM ************************/
+        // Lấy tổng số trang
+        public JsonResult Count(int items)
+        {
+            int rows = db.Product.Count();
+            float temp = (float)rows / items;
+            int sum = (temp - (int)temp != 0) ? (int)temp + 1 : (int)temp;
+            return Json(new { total = sum}, JsonRequestBehavior.AllowGet);
+        }
+
+        // Lấy danh sách sản phẩm
+        [HttpPost]
+        public JsonResult GetAllProduct(int page = 1, int pageSize = 10)
+        {
+            var product = db.Product.OrderByDescending(m => m.ProductId).Include(p => p.Category).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            return Json(new
+            {
+                Data = product.Select(x => new
+                {
+                    ProductId = x.ProductId,
+                    ProductName = x.ProductName,
+                    CategoryName = x.Category.CategoryName,
+                    Price = x.Price,
+                    Qty = x.Qty,
+                    Image = x.Image,
+                    Status = x.Status
+                })
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        // Lấy sản phẩm sau sản phẩm có Id truyền vào
+        public JsonResult GetNextProduct(int lastId)
+        {
+            var rs = db.Product.Include(x => x.Category).OrderByDescending(x => x.ProductId).Where(x => x.ProductId < lastId).Take(1);
+            return Json(new
+            {
+                Data = rs.Select(x => new
+                {
+                    ProductId = x.ProductId,
+                    ProductName = x.ProductName,
+                    CategoryName = x.Category.CategoryName,
+                    Price = x.Price,
+                    Qty = x.Qty,
+                    Image = x.Image,
+                    Status = x.Status
+                })
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        //  Search product
+        public JsonResult SearchProduct(string key)
+        {
+            var rs = db.Product.Select(x => new { x.ProductId, x.ProductName, x.Price, x.Qty }).Where(w => w.ProductName.Contains(key) || w.ProductId.ToString().Contains(key)).Take(5).ToList();
+            return Json(new { Data = rs }, JsonRequestBehavior.AllowGet);
+        }
+
+
 
         protected override void Dispose(bool disposing)
         {
