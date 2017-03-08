@@ -146,7 +146,7 @@
                         str += '<td>' + value.CategoryName + '</td>';
                         str += '<td>' + value.Price + '</td>';
                         str += '<td>' + value.Qty + '</td>';
-                        str += '<td><img src="/Areas/Admin/Content/Images/Product/' + value.Image + '" id="Image" style="width: 20px; height: 20px; border-radius: 3px;"/></td>';
+                        str += '<td><img src="/Areas/Admin/Content/Images/ProductImages/' + value.Image + '" id="Image" style="width: 20px; height: 20px; border-radius: 3px;"/></td>';
                         str += '<td><input type = "checkbox" disabled = "" '+((value.Status==true)?'checked=""':'')+'/></td>';
                         str += '<td class=" last">';
                         str += '<a class="btn btn-primary btn-xs" href="/Admin/Product/Edit/'+value.ProductId+'"><i class="fa fa-edit"></i> Sửa</a>';

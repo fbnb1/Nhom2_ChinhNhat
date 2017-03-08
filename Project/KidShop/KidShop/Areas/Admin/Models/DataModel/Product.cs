@@ -33,6 +33,7 @@ namespace Kidshop.Areas.Admin.Models.DataModel
         [Display(Name = "Giá")]
         [Required(ErrorMessage="Vui lòng nhập giá sản phẩm")]
         [DisplayFormat(DataFormatString="c,0")]
+        [DataType(DataType.Currency)]
         public double Price { get; set; }
 
         [Display(Name = "Số lượng")]

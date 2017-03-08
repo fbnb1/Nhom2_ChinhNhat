@@ -21,11 +21,10 @@ namespace KidShop.Areas.Admin.Controllers
             return View(db.Category.ToList());
         }
 
+        [HttpGet]
         public ActionResult Create()
         {
-            List<GetCategory> Cate = new List<GetCategory>() { 
-                new GetCategory(){ CategoryId = 0, CategoryName = "Vui lòng chọn nhóm hàng cha" }
-            };
+            List<GetCategory> Cate = new List<GetCategory>();
             ViewBag.ParentID = new SelectList(new GetCategory().getCategory(0, "", Cate), "CategoryId", "CategoryName");
             return View();
         }
@@ -36,6 +35,7 @@ namespace KidShop.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                category.ParentId = (category.ParentId == null) ? 0 : category.ParentId;
                 category.CreateDate = DateTime.Now;
                 category.Alias = ConvertToAlias.ConvertTitle(category.CategoryName);
                 db.Category.Add(category);
@@ -46,6 +46,7 @@ namespace KidShop.Areas.Admin.Controllers
             return View(category);
         }
 
+        [HttpGet]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -59,9 +60,7 @@ namespace KidShop.Areas.Admin.Controllers
                 return HttpNotFound();
             }
 
-            List<GetCategory> Cate = new List<GetCategory>() { 
-                new GetCategory{ CategoryId = 0, CategoryName = "Vui lòng chọn nhóm hàng cha" }
-            };
+            List<GetCategory> Cate = new List<GetCategory>();
             ViewBag.ParentId = new SelectList(new GetCategory().getCategory(0, "", Cate), "CategoryId", "CategoryName");
 
             return View(category);
@@ -73,6 +72,7 @@ namespace KidShop.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                category.ParentId = (category.ParentId == null) ? 0 : category.ParentId;
                 category.CreateDate = DateTime.Now;
                 category.Alias = ConvertToAlias.ConvertTitle(category.CategoryName);
                 db.Entry(category).State = EntityState.Modified;

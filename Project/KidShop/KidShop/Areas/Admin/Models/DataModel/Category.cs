@@ -38,6 +38,7 @@ namespace Kidshop.Areas.Admin.Models.DataModel
         public int? ParentId { get; set; }
 
         [Display(Name = "Ngày tạo")]
+        [DisplayFormat(DataFormatString="{0:dd/MM/yyyy HH:mm:ss}")]
         public DateTime? CreateDate { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
