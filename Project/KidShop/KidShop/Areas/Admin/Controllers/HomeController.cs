@@ -1,4 +1,4 @@
-﻿using Kidshop.Models.BusinessModel;
+﻿using Kidshop.Areas.Admin.Models.BusinessModel;
 using Kidshop.Areas.Admin.Models.DataModel;
 using Kidshop.Areas.Admin.Models.ViewModel;
 using System;
