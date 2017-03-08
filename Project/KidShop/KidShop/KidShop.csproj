@@ -54,6 +54,14 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -508,16 +516,51 @@
     <Content Include="Areas\Admin\Content\Vendors\jquery\jquery.min.js" />
     <Content Include="Areas\Admin\Content\Vendors\nprogress\nprogress.css" />
     <Content Include="Areas\Admin\Content\Vendors\nprogress\nprogress.js" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\OwlCarousel\owl.carousel.css" />
+    <Content Include="Content\OwlCarousel\owl.theme.css" />
+    <Content Include="Content\PagedList.css" />
+    <Content Include="Content\responsive.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Areas\Admin\Content\Vendors\iCheck\.bower.json" />
     <Content Include="Areas\Admin\Content\Vendors\iCheck\bower.json" />
     <Content Include="Areas\Admin\Content\Vendors\iCheck\icheck.jquery.json" />
     <Content Include="Areas\Admin\Content\Vendors\ckeditor\skins\moono-lisa\readme.md" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\iciel Cadena.ttf" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Images\btn-buy.png" />
+    <Content Include="Images\left-control.png" />
+    <Content Include="Images\left.png" />
+    <Content Include="Images\logo.png" />
+    <Content Include="Images\logo1.png" />
+    <Content Include="Images\right-control.png" />
+    <Content Include="Images\sale-circle-green.png" />
+    <Content Include="Images\slideshow_image_1.jpg" />
+    <Content Include="Scripts\home.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Scripts\jquery-1.8.0.intellisense.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.8.0.js" />
     <Content Include="Scripts\jquery-1.8.0.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\owl.carousel.js" />
+    <Content Include="Scripts\owl.carousel.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -537,15 +580,23 @@
     <Compile Include="Areas\Admin\Models\BusinessModel\GetCategory.cs" />
     <Compile Include="Areas\Admin\Models\BusinessModel\Validations.cs" />
     <Compile Include="Areas\Admin\Models\DataModel\Account.cs" />
+    <Compile Include="Areas\Admin\Models\DataModel\Cart.cs" />
     <Compile Include="Areas\Admin\Models\DataModel\Category.cs" />
+    <Compile Include="Areas\Admin\Models\DataModel\Order.cs" />
+    <Compile Include="Areas\Admin\Models\DataModel\OrderDetail.cs" />
     <Compile Include="Areas\Admin\Models\DataModel\Product.cs" />
     <Compile Include="Areas\Admin\Models\DataModel\ProductDetail.cs" />
     <Compile Include="Areas\Admin\Models\DataModel\ProductImage.cs" />
     <Compile Include="Areas\Admin\Models\ViewModel\AccountViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ViewModel\BigViewModel.cs" />
+    <Compile Include="Controllers\AccountsController.cs" />
+    <Compile Include="Controllers\Common.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -580,6 +631,19 @@
     <Content Include="Areas\Admin\Content\Vendors\font-awesome\fonts\fontawesome-webfont.woff" />
     <Content Include="Areas\Admin\Content\Vendors\font-awesome\fonts\fontawesome-webfont.woff2" />
     <Content Include="Areas\Admin\Content\Vendors\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Accounts\Index.cshtml" />
+    <Content Include="Views\Shared\_PartialLogin.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\PartialMenu.cshtml" />
+    <Content Include="Views\Home\PartialNewProduct.cshtml" />
+    <Content Include="Views\Home\PartialSale.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Product\Details.cshtml" />
+    <Content Include="Views\Product\PartialProductUrl.cshtml" />
+    <Content Include="Views\Product\PartialCategory.cshtml" />
+    <Content Include="Views\Product\PartialProductImage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -593,8 +657,6 @@
     <Folder Include="Areas\Admin\Content\Images\ProductImages\" />
     <Folder Include="Areas\Admin\Content\Images\Product\" />
     <Folder Include="Areas\Admin\Content\Images\User\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -59,3 +59,7 @@ D:\OneDrive\Workspace\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\System.Web.Mvc
 D:\OneDrive\Workspace\Nhom2_ChinhNhat\Project\KidShop\KidShop\obj\Debug\KidShop.csprojResolveAssemblyReference.cache
 D:\OneDrive\Workspace\Nhom2_ChinhNhat\Project\KidShop\KidShop\obj\Debug\KidShop.dll
 D:\OneDrive\Workspace\Nhom2_ChinhNhat\Project\KidShop\KidShop\obj\Debug\KidShop.pdb
+D:\OneDrive\Workspace\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\PagedList.dll
+D:\OneDrive\Workspace\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\PagedList.Mvc.dll
+D:\OneDrive\Workspace\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\PagedList.xml
+D:\OneDrive\Workspace\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\PagedList.Mvc.xml

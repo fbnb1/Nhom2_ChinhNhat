@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace Kidshop.Areas.Admin.Models.DataModel
+namespace KidShop.Areas.Admin.Models.DataModel
 {
     [Table("Account")]
     public class Account
