@@ -1,4 +1,4 @@
-﻿using Kidshop.Areas.Admin.Models.BusinessModel;
+﻿using Kidshop.Models.BusinessModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

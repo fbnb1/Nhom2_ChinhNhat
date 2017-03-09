@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 
-namespace Kidshop.Areas.Admin.Models.BusinessModel
+namespace Kidshop.Models.BusinessModel
 {
     public class Common
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Kidshop.Areas.Admin.Models.BusinessModel;
+using Kidshop.Models.BusinessModel;
 using Kidshop.Areas.Admin.Models.DataModel;
 using Kidshop.Areas.Admin.Models.ViewModel;
 
