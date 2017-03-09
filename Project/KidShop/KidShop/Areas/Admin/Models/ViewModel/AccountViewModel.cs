@@ -1,4 +1,4 @@
-﻿using KidShop.Areas.Admin.Models.BusinessModel;
+﻿using Kidshop.Areas.Admin.Models.BusinessModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace KidShop.Areas.Admin.Models.ViewModel
+namespace Kidshop.Areas.Admin.Models.ViewModel
 {
     public class RegisterViewModel
     {
