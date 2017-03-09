@@ -1,6 +1,6 @@
-﻿using Kidshop.Areas.Admin.Models.BusinessModel;
-using Kidshop.Areas.Admin.Models.DataModel;
-using Kidshop.Areas.Admin.Models.ViewModel;
+﻿using KidShop.Areas.Admin.Models.BusinessModel;
+using KidShop.Areas.Admin.Models.DataModel;
+using KidShop.Areas.Admin.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.IO;
 
-namespace Kidshop.Areas.Admin.Controllers
+namespace KidShop.Areas.Admin.Controllers
 {
     public class HomeController : Controller
     {

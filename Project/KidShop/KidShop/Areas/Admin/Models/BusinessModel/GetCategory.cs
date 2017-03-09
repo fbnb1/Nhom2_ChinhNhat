@@ -1,10 +1,10 @@
-﻿using Kidshop.Areas.Admin.Models.BusinessModel;
+﻿using KidShop.Areas.Admin.Models.BusinessModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Kidshop.Areas.Admin.Models.BusinessModel
+namespace KidShop.Areas.Admin.Models.BusinessModel
 {
     public class GetCategory
     {

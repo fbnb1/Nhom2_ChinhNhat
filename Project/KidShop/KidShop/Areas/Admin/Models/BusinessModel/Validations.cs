@@ -1,11 +1,10 @@
-﻿using Kidshop.Models.BusinessModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace Kidshop.Areas.Admin.Models.BusinessModel
+namespace KidShop.Areas.Admin.Models.BusinessModel
 {
     public class UniqueUsername : ValidationAttribute
     {
