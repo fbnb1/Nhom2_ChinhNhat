@@ -1,4 +1,4 @@
-﻿using KidShop.Areas.Admin.Models.BusinessModel;
+﻿using Kidshop.Areas.Admin.Models.BusinessModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace KidShop.Areas.Admin.Models.DataModel
+namespace Kidshop.Areas.Admin.Models.DataModel
 {
     [Table("Product")]
     public class Product
@@ -42,12 +42,6 @@ namespace KidShop.Areas.Admin.Models.DataModel
 
         [Display(Name="Ảnh đại diện")]
         public string Image { get; set; }
-
-        [Display(Name = "Khuyến mại")]
-        public double Sale { get; set; }
-
-        [Display(Name = "Ngày tạo")]
-        public DateTime? CreateDate { get; set; }
 
         [Display(Name="Ẩn/Hiện")]
         public bool Status { get; set; }

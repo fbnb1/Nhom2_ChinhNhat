@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace KidShop.Areas.Admin.Models.BusinessModel
+namespace Kidshop.Areas.Admin.Models.BusinessModel
 {
     public class UniqueUsername : ValidationAttribute
     {
