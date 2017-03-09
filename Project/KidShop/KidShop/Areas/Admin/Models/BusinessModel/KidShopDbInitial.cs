@@ -5,7 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
-namespace Kidshop.Models.BusinessModel
+namespace Kidshop.Areas.Admin.Models.BusinessModel
 {
     public class KidShopDbInitial : DropCreateDatabaseIfModelChanges<KidShopDbContext>
     {
