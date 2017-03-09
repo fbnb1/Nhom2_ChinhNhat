@@ -1,11 +1,11 @@
-﻿using Kidshop.Areas.Admin.Models.DataModel;
+﻿using KidShop.Areas.Admin.Models.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
-namespace Kidshop.Areas.Admin.Models.BusinessModel
+namespace KidShop.Areas.Admin.Models.BusinessModel
 {
     public class KidShopDbContext:DbContext
     {
@@ -18,8 +18,10 @@ namespace Kidshop.Areas.Admin.Models.BusinessModel
         public DbSet<Category> Category { get; set; }
         public DbSet<Product> Product { get; set; }
         public DbSet<ProductImage> ProductImage { get; set; }
-
         public DbSet<ProductDetail> ProductDetail { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
