@@ -1,0 +1,248 @@
+﻿@model KidShop.Areas.Admin.Models.DataModel.Product
+@using System.Configuration
+@{
+    ViewBag.Title = Model.ProductName;
+}
+
+<!--ScripFB-->
+<div id="fb-root"></div>
+<script>
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.8";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<!--EndScripFB-->
+
+<script>
+    var list = [];
+    @foreach(var item in ViewBag.ListSizeColor)
+    {
+        <text>
+    list.push({ size: "@item.Size", color: "@item.Color", qty: @item.Qty });
+    </text>
+    }
+    function changeSizeColor() {
+        var size = document.getElementById("product-select-option-0").value;
+        var color = document.getElementById("product-select-option-1").value;
+        obj = list.find(function (obj) { return obj.size == size && obj.color == color });
+        if(obj == null || obj.qty <= 0){
+            document.getElementById("qty").innerHTML = "Hết hàng";
+        }
+        else{
+            document.getElementById("qty").innerHTML = "Còn hàng";
+        }
+    }
+
+    function addCart(productId, quantity){
+
+    }
+</script>
+<!-- Main Content -->
+
+<div id="add_succes" style="display:none;">
+    <p><i class="fa fa-check fa-2x"></i>Thêm sản phẩm thành công</p>
+</div>
+
+
+<div class="category-page-layout">
+    <div class="container">
+        <div class="row">
+            <article class="col-lg-12 col-md-12 col-sm-12 col-xs-12 sk-product-detail-content-col">
+                @Html.Action("PartialProductUrl", "Product", new { id = Model.ProductId, product = 1 })
+                <div class="row sk-sigle-content product-view">
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        @Html.Action("PartialProductImage", "Product", new { id = Model.ProductId });
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <div class="sk-page-detail-title">
+                            <h1 itemprop="name" class="pd-name">@Model.ProductName</h1>
+                        </div>
+                        <div class="share">
+                            <div class="fb-like" data-href="@Request.Url" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+                        </div>
+                        <div class="sk-price-box clearfix">
+                            <div class="pull-left">
+                                @if (Model.Sale > 0)
+                                {
+                                    <div class="sale">
+                                        <span>Giá gốc:</span>
+                                        <del class="old-price">
+                                            @Model.Price₫
+                                        </del>
+                                    </div>
+                                    <span>Giá:</span>
+                                    <span class="price">@Model.Sale₫</span>
+                                }
+                                else
+                                {
+                                    <span>Giá:</span>
+                                    <span class="price">@Model.Price₫</span>
+                                }
+                            </div>
+                            <div class="stock pull-left">
+                                <div class="availability in-stock pull-right"><span id="qty">Còn hàng</span></div>
+                            </div>
+                        </div>
+                        <ul class="sk-product-info-wrap">
+                            <li>
+                                <span>Mã sản phẩm:</span>
+                                <span>@Model.ProductId</span>
+                            </li>
+                            <li>
+                                <span>Thương hiệu:</span>
+                                <span>Gap</span>
+                            </li>
+                        </ul>
+                        <p class="pd-description-mini">
+                            @Model.Description
+                        </p>
+                        <div class="pd-form">
+                            <div class="pd-form-top clearfix">
+                                <div class="selector-wrapper clearfix">
+                                    <label for="product-select-option-0">Kích thước</label>
+                                    <select class="single-option-selector" onchange="changeSizeColor()" id="product-select-option-0">
+                                        @foreach (var item in ViewBag.ListSize)
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="selector-wrapper clearfix">
+                                    <label for="product-select-option-1">Màu sắc</label>
+                                    <select class="single-option-selector" onchange="changeSizeColor()" id="product-select-option-1">
+                                        @foreach (var item in ViewBag.ListColor)
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="pd-form-bottom clearfix">
+                                <input type="number" value="1" class="single-input-selector" name="quantity" placeholder="Số lượng">
+                                <input type="hidden" name="variantId" value="6383573" />
+                                <button class="button product-btn-buy" title="Đặt hàng" type="submit" onclick="Bizweb.addItem(6383573, 1, cartItem)"><span>Đặt hàng</span></button>
+                            </div>
+                            <div class="sk-hotline-block">
+                                <span>Gọi ngay để được tư vấn mua hàng !</span>
+                                <div class="sk-widget-title pink-bg-widget">
+                                    <h5>Hotline: <a href="tel:@ConfigurationManager.AppSettings["hotline"]">@ConfigurationManager.AppSettings["hotline"]</a></h5>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="sk-shipping">
+                                <img src="http://bizweb.dktcdn.net/100/117/632/themes/157694/assets/icon-dt.jpg?1480685335175" width="100%" />
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+            </article>
+            <article class="col-lg-8 col-md-8 col-sm-12 col-xs-12 sk-product-detail-content-col">
+                <div class="sk-pt-wrap">
+                    <div class="fb-comments" data-href="@Request.Url" data-width="100%" data-numposts="10"></div>
+                </div>
+                <div class="sk-related-product-list">
+                    <div class="product-care-title">
+                        <h2>
+                            Sản phẩm liên quan
+                        </h2>
+                    </div>
+                    <div class="sk-related-product-listing">
+
+                        @foreach (var item in ViewBag.ListProduct)
+                        {
+                        <div class="discounts-product-right sk-related-product-item col-md-3 col-sm-6 col-xs-12">
+                                
+                                @if (item.Sale > 0)
+                                {
+                                    <div class="sale-box text-center">
+                                        <span class="price">
+                                            @{int sale = (int)((item.Price - item.Sale) / item.Price * 100);}
+                                            -@sale%
+                                        </span>
+                                    </div>
+
+                                    <div class="discounts-product-image">
+                                        <a href="@Url.Action("Details", "Product", new { id = item.ProductId })">
+                                            <img src="~/Areas/Admin/Content/Images/Product/@item.Image" alt=@item.ProductName class="img-responsive">
+                                        </a>
+
+                                        <div class="price-box">
+                                            @if (item.Qty <= 0)
+                                            {
+                                                <span class="price">Hết hàng</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="price">
+                                                    @item.Sale₫
+                                                </span>
+                                                <span class="price-compare">
+                                                    @item.Price₫
+                                                </span>
+                                            }
+                                        </div>
+                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="discounts-product-image">
+                                                        <a href="@Url.Action("Details", "Product", new { id = item.ProductId })">
+                                                            <img src="~/Areas/Admin/Content/Images/Product/@item.Image" alt=@item.ProductName class="img-responsive">
+                                                        </a>
+
+                                                        <div class="price-box">
+                                                            @if (item.Qty <= 0)
+                                                            {
+                                                                <span class="price">Hết hàng</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="price">
+                                                                    @item.Price₫
+                                                                </span>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                }
+
+                                <div class="discounts-product-info">
+                                    <h3 class="item-title">
+                                        <a href="@Url.Action("Details", "Product", new { id = item.ProductId })" title="@item.ProductName">@item.ProductName</a>
+                                    </h3>
+                                </div>
+
+                                <div class="text-center">
+                                    @if (item.Qty <= 0)
+                                    {
+                                        <button disabled="disabled" class="button btn-cart btn-buy product-atc" title="Cho vào giỏ hàng"><span>Hết hàng</span></button>
+                                    }
+                                    else
+                                    {
+                                        <button class="button btn-cart btn-more product-atc" title="Mua hàng" type="button" onclick="window.location.href='@Url.Action("Details", "Product", new { id = item.ProductId })'"><span><img src="~/Images/btn-buy.png" alt=""></span></button>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </article>
+            <aside class="col-lg-4 col-md-4 hidden-sm hidden-xs">
+                @Html.Action("PartialCategory", "Product", new { id = 0})
+                <div class="sk-leftSidebar-widget social-widget">
+                    <div class="sk-widget-title green-bg-widget">
+                        <h5>Facebook</h5>
+                    </div>
+                    <div class="social-wrap block-content">
+                        <div class="fb-page" data-href="@ConfigurationManager.AppSettings["urlfacebook"]" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/facebook" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/facebook">Facebook</a></blockquote></div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</div>
+<!-- End Main Content -->
+
+

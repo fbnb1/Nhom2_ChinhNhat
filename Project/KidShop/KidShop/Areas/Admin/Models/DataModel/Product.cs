@@ -43,6 +43,12 @@ namespace KidShop.Areas.Admin.Models.DataModel
         [Display(Name="Ảnh đại diện")]
         public string Image { get; set; }
 
+        [Display(Name = "Khuyến mại")]
+        public double Sale { get; set; }
+
+        [Display(Name = "Ngày tạo")]
+        public DateTime? CreateDate { get; set; }
+
         [Display(Name="Ẩn/Hiện")]
         public bool Status { get; set; }
 
