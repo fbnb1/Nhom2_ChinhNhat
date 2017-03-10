@@ -1,11 +1,11 @@
-﻿using Kidshop.Areas.Admin.Models.DataModel;
+﻿using KidShop.Areas.Admin.Models.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
-namespace Kidshop.Areas.Admin.Models.BusinessModel
+namespace KidShop.Areas.Admin.Models.BusinessModel
 {
     public class KidShopDbContext:DbContext
     {

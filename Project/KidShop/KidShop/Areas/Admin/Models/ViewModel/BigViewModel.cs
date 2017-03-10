@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Kidshop.Areas.Admin.Models.DataModel;
+using KidShop.Areas.Admin.Models.DataModel;
 
-namespace Kidshop.Areas.Admin.Models.ViewModel
+namespace KidShop.Areas.Admin.Models.ViewModel
 {
     public class BigViewModel
     {
