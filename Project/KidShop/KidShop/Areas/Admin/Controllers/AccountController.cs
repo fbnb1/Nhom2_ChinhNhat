@@ -30,7 +30,7 @@ namespace KidShop.Areas.Admin.Controllers
             {
                 return View(acc);
             }
-            var rs_user = db.Account.SingleOrDefault(x => x.Username == acc.Username);
+            var rs_user = db.Account.SingleOrDefault(x => x.Email == acc.Username);
             if (rs_user == null)
             {
                 ViewBag.Error = "Tên đăng nhập không tồn tại. Vui lòng kiểm tra lại.";
