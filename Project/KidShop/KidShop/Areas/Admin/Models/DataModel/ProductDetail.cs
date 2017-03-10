@@ -33,6 +33,8 @@ namespace KidShop.Areas.Admin.Models.DataModel
         [Display(Name="Giá")]
         public double Price { get; set; }
 
+        public bool Status { get; set; }
+
         public virtual Product Product { get; set; }
     }
 }

@@ -1,10 +1,15 @@
 ﻿@model KidShop.Areas.Admin.Models.DataModel.Product
+<<<<<<< HEAD
+
+
+=======
 @{
     var model2 = new KidShop.Areas.Admin.Models.DataModel.ProductDetail();
     model2.Price = 25;
     model2.ProductId = 1;
     model2.Size = "XL";
 }
+>>>>>>> origin/master
 <p>
     @Html.ActionLink("Danh sách sản phẩm", "Index", "Product", new { }, new { @class = "btn btn-primary  btn-sm" })
 </p>
@@ -101,7 +106,7 @@
                             <div class="col-md-offset-3 col-md-6 col-sm-6 col-xs-12" id="product-detail">
 
                             </div>                            
-                            @Html.ValidationMessageFor(model => model.ProductDetails, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(model => model.ProductDetails.Count, "", new { @class = "text-danger col-md-offset-3 col-md-6 col-sm-6 col-xs-12" })
                         </div>
                         <div class="form-group">
                             <div class="col-md-offset-3 col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
@@ -172,7 +177,7 @@
             $('#product-detail').children().remove();
             for (var i = 0; i < color.length; i++) {
                 for (var j = 0; j < size.length; j++) {
-                    var item = '<div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px; margin:0px;"><div class="col-md-1 col-sm-1 col-xs-1" style="line-height: 44px; padding: 0px; margin: 0px;"><input type="checkbox" class="flat" checked="" id="' + color[i] + '-' + size[j] + '"/></div><div class="col-md-3 col-sm-3 col-xs-3" style="line-height: 34px; padding: 0px; margin: 0px;"><span class="label label-success">' + (color[i] + ' ' + size[j]).trim() + '</span></div><div class="col-md-4 col-sm-4 col-xs-4" style="padding: 0px; margin:0px;"><input type="number" class="form-control" placeholder="Giá sản phẩm" value="' + price + '" name="price_detail[' + color[i] + '-' + size[j] + ']" required=""/></div><div class="col-md-4 col-sm-4 col-xs-4" style="padding: 0px; margin:0px;"><input type="number" class="form-control" placeholder="Số lượng" name="qty_detail[' + color[i] + '-' + size[j] + ']" /></div></div>';
+                    var item = '<div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px; margin:0px;"><div class="col-md-1 col-sm-1 col-xs-1" style="line-height: 44px; padding: 0px; margin: 0px;"><input type="checkbox" checked="" id="' + color[i] + '-' + size[j] + '" name="cbx_detail[' + color[i] + '-' + size[j] + ']" /></div><div class="col-md-3 col-sm-3 col-xs-3" style="line-height: 34px; padding: 0px; margin: 0px;"><span class="label label-success">' + (color[i] + ' ' + size[j]).trim() + '</span></div><div class="col-md-4 col-sm-4 col-xs-4" style="padding: 0px; margin:0px;"><input type="number" class="form-control" placeholder="Giá sản phẩm" value="' + price + '" name="price_detail[' + color[i] + '-' + size[j] + ']" required=""/></div><div class="col-md-4 col-sm-4 col-xs-4" style="padding: 0px; margin:0px;"><input type="number" class="form-control" placeholder="Số lượng" name="qty_detail[' + color[i] + '-' + size[j] + ']" required="" /></div></div>';
                     if (size[i] != '' || color[j] != '') {
                         $(item).appendTo($('#product-detail'));
                         $("#" + color[i] + '-' + size[j]).on('change', function () {

@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 /* NUGET: BEGIN LICENSE TEXT
  *
  * Microsoft grants you the right to use these script files for the sole
@@ -12,6 +14,7 @@
  * below are for informational purposes only.
  *
  * NUGET: END LICENSE TEXT */
+>>>>>>> origin/master
 /*!
  * jQuery JavaScript Library v1.10.2
  * http://jquery.com/

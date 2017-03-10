@@ -6,9 +6,15 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+<<<<<<< HEAD
+using System.IO;
+using KidShop.Areas.Admin.Models.DataModel;
+using KidShop.Areas.Admin.Models.BusinessModel;
+=======
 using KidShop.Areas.Admin.Models.DataModel;
 using KidShop.Areas.Admin.Models.BusinessModel;
 using System.IO;
+>>>>>>> origin/master
 using KidShop.Areas.Admin.Models.ViewModel;
 
 namespace KidShop.Areas.Admin.Controllers
@@ -68,16 +74,6 @@ namespace KidShop.Areas.Admin.Controllers
             {
                 product.Qty = (Qty_detail == 0) ? product.Qty : Qty_detail;
 
-                //Lưu ảnh đại diện sản phẩm
-                //if (Image != null && Image.ContentLength > 0)
-                //{
-                //    string extensionFile = Image.FileName.Substring(Image.FileName.LastIndexOf("."));
-                //    string newfilename = Common.EncryptMD5(DateTime.Now.ToBinary().ToString()) + extensionFile;
-                //    string path = Path.Combine(Server.MapPath("~/Areas/Admin/Content/Images/Product"), newfilename);
-                //    Image.SaveAs(path);
-                //    product.Image = newfilename;
-                //}
-
                 //Lưu ảnh detail sản phẩm vào server
                 List<string> listFileName = new List<string>();
                 if (Session["fileUpload"] != null)
@@ -121,20 +117,25 @@ namespace KidShop.Areas.Admin.Controllers
                 {
                     for (int j = 0; j < tags_size.Length; j++)
                     {
-                        if (Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null)
+                        if (Request.Form["qty_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null && Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null)
                         {
-                            db.ProductDetail.Add(new ProductDetail() {
+                            db.ProductDetail.Add(new ProductDetail()
+                            {
                                 ProductId = lastProductId,
                                 Color = tags_color[i],
                                 Size = tags_size[j],
-                                Qty = Int16.Parse(Request.Form["qty_detail[" + tags_color[i] + "-" + tags_size[j] + "]"]),
-                                Price = Double.Parse(Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"])
+                                Qty = (Request.Form["qty_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null) ? Int16.Parse(Request.Form["qty_detail[" + tags_color[i] + "-" + tags_size[j] + "]"]) : 0,
+                                Price = (Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null) ? Double.Parse(Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"]) : 0
                             });
                         }
                     }
                 }
                 db.SaveChanges();
                 return RedirectToAction("Index");
+            }
+            else
+            {
+                Session["fileUpload"] = null;
             }
             ViewBag.CategoryId = new SelectList(db.Category, "CategoryId", "CategoryName", product.CategoryId);
             return View(product);
@@ -164,38 +165,58 @@ namespace KidShop.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Edit([Bind(Include = "ProductId,ProductName,Description,CategoryId,Price,Image,Qty,Status")] Product product, HttpPostedFileBase Image)
+        public ActionResult Edit(/*[Bind(Include = "ProductId,ProductName,Description,CategoryId,Price,Image,Qty,Status")] */Product product, HttpPostedFileBase Image)
         {
+            // Lấy tổng sản phẩm
+            var tags_size = Request.Form["tags_size"].Split(',');
+            var tags_color = Request.Form["tags_color"].Split(',');
+            int Qty_detail = 0;
+            for (int i = 0; i < tags_color.Length; i++)
+            {
+                for (int j = 0; j < tags_size.Length; j++)
+                {
+                    if (Request.Form["qty_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null)
+                    {
+                        try
+                        {
+                            Qty_detail += Int16.Parse(Request.Form["qty_detail[" + tags_color[i] + "-" + tags_size[j] + "]"]);
+                        }
+                        catch
+                        {
+                            ModelState.AddModelError("ProductDetails", "Số lượng nhập ko hợp lệ");
+                        }
+                    }
+                }
+            }
             if (ModelState.IsValid)
             {
                 db.Entry(product).State = EntityState.Modified;
-                //Nếu người dùng thay đổi Image
-                //if (Image != null && Image.ContentLength > 0)
-                //{
-                //    //Lấy tên file image cũ
-                //    KidShopDbContext db2 = new KidShopDbContext();
-                //    var currentImage = db2.Product.FirstOrDefault(x => x.ProductId == product.ProductId).Image;
-                //    db2.Dispose();
 
-                //    //Xóa image cũ
-                //    string fullpath = Request.MapPath("~/Areas/Admin/Content/Images/Product/" + currentImage);
-                //    if (System.IO.File.Exists(fullpath))
-                //    {
-                //        System.IO.File.Delete(fullpath);
-                //    }
+                // Xóa chi tiết sản phẩm cũ
+                var delete = db.ProductDetail.Where(x => x.ProductId == product.ProductId);
+                db.ProductDetail.RemoveRange(delete);
+                db.SaveChanges();
 
-                //    //Lưu file image mới vào folder
-                //    string extensionFile = Image.FileName.Substring(Image.FileName.LastIndexOf("."));
-                //    string newfilename = Common.EncryptMD5(DateTime.Now.ToBinary().ToString()) + extensionFile;
-                //    string path = Path.Combine(Server.MapPath("~/Areas/Admin/Content/Images/Product"), Path.GetFileName(newfilename));
-                //    Image.SaveAs(path);
-                //    product.Image = newfilename;
-                //}
-                //else
-                //{
-                //    //Nếu người dùng ko chọn Image thì Image sẽ giữ nguyên ko thay đổi
-                //    db.Entry(product).Property(e => e.Image).IsModified = false;
-                //}
+                // Lưu chi tiết sản phẩm
+                product.Qty = (Qty_detail == 0) ? product.Qty : Qty_detail; 
+                for (int i = 0; i < tags_color.Length; i++)
+                {
+                    for (int j = 0; j < tags_size.Length; j++)
+                    {
+                        if (Request.Form["qty_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null && Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null)
+                        {
+                            db.ProductDetail.Add(new ProductDetail()
+                            {
+                                ProductId = product.ProductId,
+                                Color = tags_color[i],
+                                Size = tags_size[j],
+                                Qty = (Request.Form["qty_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null) ? Int16.Parse(Request.Form["qty_detail[" + tags_color[i] + "-" + tags_size[j] + "]"]) : 0,
+                                Price = (Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null) ? Double.Parse(Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"]) : 0
+                            });
+                        }
+                    }
+                }
+                db.SaveChanges();
 
                 //Lưu ảnh detail sản phẩm
                 List<string> listFileName = new List<string>();
@@ -239,6 +260,7 @@ namespace KidShop.Areas.Admin.Controllers
                     }
                 }
                 db.SaveChanges();
+
                 product.Image = db.ProductImage.Where(x=>x.ProductId == product.ProductId).Select(x=>x.ImageName).FirstOrDefault();
 
                 db.SaveChanges();
@@ -279,7 +301,7 @@ namespace KidShop.Areas.Admin.Controllers
 
         // UploadFile function
         // Mỗi khi chọn ảnh tại DropzoneJS, function này sẽ đc thực thi
-        // và lưu vào Session['fileUpload'], List fileUpload
+        // và lưu vào Session['fileUpload'], List fileUpload 
         // Khi nào người dùng Submit form thì mới thực lưu file vào CSDL
         [HttpPost]
         public void UploadFile()
@@ -408,6 +430,11 @@ namespace KidShop.Areas.Admin.Controllers
             return Json(new { Data = rs }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetProductDetail(int id)
+        {
+            var rs = db.ProductDetail.Select(x => new { x.ProductId, x.Color, x.Size, x.Qty, x.Price }).Where(x => x.ProductId == id);
+            return Json( rs, JsonRequestBehavior.AllowGet);
+        }
 
 
         protected override void Dispose(bool disposing)
