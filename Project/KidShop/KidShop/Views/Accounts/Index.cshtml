@@ -1,7 +1,58 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-}
+﻿<!-- Main Content -->
+<div class="main-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-style form-login">
+                    <form accept-charset='UTF-8' action='/account/register' id='customer_register' method='post'>
+                        <input name='FormType' type='hidden' value='customer_register' />
+                        <input name='utf8' type='hidden' value='true' />
+                        <h3 class="form-heading">Đăng ký tài khoản</h3>
+                        <p class="form-description">Nếu bạn có một tài khoản, xin vui lòng chuyển qua trang <a href="/account/login"><strong>ĐĂNG NHẬP</strong></a>.</p>
 
-<h2>Index</h2>
-
+                        <div class="row">
+                            <div class="col-md-1">
+                                <p class="text-right">Tên*</p>
+                            </div>
+                            <div class="col-md-11">
+                                <input type="text" value="" name="firstName" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <p class="text-right">Họ*</p>
+                            </div>
+                            <div class="col-md-11">
+                                <input type="text" value="" name="lastName" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <p class="text-right">Email*</p>
+                            </div>
+                            <div class="col-md-11">
+                                <input type="email" value="" name="email" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <p class="text-right">Mật khẩu*</p>
+                            </div>
+                            <div class="col-md-11">
+                                <input type="password" value="" name="password" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                            </div>
+                            <div class="col-md-11">
+                                <button class="btn-cart">Đăng ký</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Main Content -->

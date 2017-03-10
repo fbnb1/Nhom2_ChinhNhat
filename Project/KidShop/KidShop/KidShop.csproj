@@ -644,6 +644,7 @@
     <Content Include="Views\Product\PartialProductUrl.cshtml" />
     <Content Include="Views\Product\PartialCategory.cshtml" />
     <Content Include="Views\Product\PartialProductImage.cshtml" />
+    <Content Include="Views\Product\PartialProduct.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

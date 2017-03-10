@@ -27,8 +27,8 @@ namespace KidShop.Controllers
         }
 
         // POST: /Account/Register
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
         //public async ActionResult Register(RegisterViewModel register)
         //{
         //    if (ModelState.IsValid)

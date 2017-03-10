@@ -1,5 +1,6 @@
 ﻿@model KidShop.Areas.Admin.Models.DataModel.Product
 @using System.Configuration
+@using KidShop.Areas.Admin.Models.DataModel
 @{
     ViewBag.Title = Model.ProductName;
 }
@@ -21,10 +22,11 @@
     @foreach(var item in ViewBag.ListSizeColor)
     {
         <text>
-    list.push({ size: "@item.Size", color: "@item.Color", qty: @item.Qty });
+    list.push({ size: "@item.Size", color: "@item.Color", qty: @item.Qty, price: @item.Price });
     </text>
     }
-    function changeSizeColor() {
+
+    function changeSizeColor(){
         var size = document.getElementById("product-select-option-0").value;
         var color = document.getElementById("product-select-option-1").value;
         obj = list.find(function (obj) { return obj.size == size && obj.color == color });
@@ -34,11 +36,15 @@
         else{
             document.getElementById("qty").innerHTML = "Còn hàng";
         }
+        document.getElementById("price").innerHTML = obj.price - (obj.price * (@Model.Sale)/100) + "₫";
+        document.getElementById("oldPrice").innerHTML = obj.price + "₫";
     }
 
     function addCart(productId, quantity){
 
     }
+
+
 </script>
 <!-- Main Content -->
 
@@ -54,7 +60,7 @@
                 @Html.Action("PartialProductUrl", "Product", new { id = Model.ProductId, product = 1 })
                 <div class="row sk-sigle-content product-view">
                     <div class="col-md-6 col-sm-12 col-xs-12">
-                        @Html.Action("PartialProductImage", "Product", new { id = Model.ProductId });
+                        @Html.Action("PartialProductImage", "Product", new { id = Model.ProductId })
                     </div>
                     <div class="col-md-6 col-sm-12 col-xs-12">
                         <div class="sk-page-detail-title">
@@ -69,18 +75,19 @@
                                 {
                                     <div class="sale">
                                         <span>Giá gốc:</span>
-                                        <del class="old-price">
+                                        <del class="old-price" id="oldPrice">
                                             @Model.Price₫
                                         </del>
                                     </div>
-                                    <span>Giá:</span>
-                                    <span class="price">@Model.Sale₫</span>
                                 }
-                                else
-                                {
-                                    <span>Giá:</span>
-                                    <span class="price">@Model.Price₫</span>
-                                }
+                                <span>Giá:</span>
+                                <span class="price" id="price">
+                                    @{ 
+                                        int price = (int)Model.Price;
+                                        price = price - (price * (int)Model.Sale/100);
+                                        @price
+                                    }₫
+                                </span>
                             </div>
                             <div class="stock pull-left">
                                 <div class="availability in-stock pull-right"><span id="qty">Còn hàng</span></div>
@@ -103,7 +110,7 @@
                             <div class="pd-form-top clearfix">
                                 <div class="selector-wrapper clearfix">
                                     <label for="product-select-option-0">Kích thước</label>
-                                    <select class="single-option-selector" onchange="changeSizeColor()" id="product-select-option-0">
+                                    <select class="single-option-selector" on="changeSizeColor()" onchange="changeSizeColor()" id="product-select-option-0">
                                         @foreach (var item in ViewBag.ListSize)
                                         {
                                             <option value="@item">@item</option>
@@ -151,79 +158,10 @@
                     </div>
                     <div class="sk-related-product-listing">
 
-                        @foreach (var item in ViewBag.ListProduct)
+                        @foreach (Product item in ViewBag.ListProduct)
                         {
-                        <div class="discounts-product-right sk-related-product-item col-md-3 col-sm-6 col-xs-12">
-                                
-                                @if (item.Sale > 0)
-                                {
-                                    <div class="sale-box text-center">
-                                        <span class="price">
-                                            @{int sale = (int)((item.Price - item.Sale) / item.Price * 100);}
-                                            -@sale%
-                                        </span>
-                                    </div>
-
-                                    <div class="discounts-product-image">
-                                        <a href="@Url.Action("Details", "Product", new { id = item.ProductId })">
-                                            <img src="~/Areas/Admin/Content/Images/Product/@item.Image" alt=@item.ProductName class="img-responsive">
-                                        </a>
-
-                                        <div class="price-box">
-                                            @if (item.Qty <= 0)
-                                            {
-                                                <span class="price">Hết hàng</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="price">
-                                                    @item.Sale₫
-                                                </span>
-                                                <span class="price-compare">
-                                                    @item.Price₫
-                                                </span>
-                                            }
-                                        </div>
-                                    </div>
-                                                }
-                                                else
-                                                {
-                                                    <div class="discounts-product-image">
-                                                        <a href="@Url.Action("Details", "Product", new { id = item.ProductId })">
-                                                            <img src="~/Areas/Admin/Content/Images/Product/@item.Image" alt=@item.ProductName class="img-responsive">
-                                                        </a>
-
-                                                        <div class="price-box">
-                                                            @if (item.Qty <= 0)
-                                                            {
-                                                                <span class="price">Hết hàng</span>
-                                                            }
-                                                            else
-                                                            {
-                                                                <span class="price">
-                                                                    @item.Price₫
-                                                                </span>
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                }
-
-                                <div class="discounts-product-info">
-                                    <h3 class="item-title">
-                                        <a href="@Url.Action("Details", "Product", new { id = item.ProductId })" title="@item.ProductName">@item.ProductName</a>
-                                    </h3>
-                                </div>
-
-                                <div class="text-center">
-                                    @if (item.Qty <= 0)
-                                    {
-                                        <button disabled="disabled" class="button btn-cart btn-buy product-atc" title="Cho vào giỏ hàng"><span>Hết hàng</span></button>
-                                    }
-                                    else
-                                    {
-                                        <button class="button btn-cart btn-more product-atc" title="Mua hàng" type="button" onclick="window.location.href='@Url.Action("Details", "Product", new { id = item.ProductId })'"><span><img src="~/Images/btn-buy.png" alt=""></span></button>
-                                    }
-                                </div>
+                            <div class="sk-related-product-item col-md-3 col-sm-6 col-xs-12">
+                                @Html.Partial("~/Views/Product/PartialProduct.cshtml", item)
                             </div>
                         }
                     </div>

@@ -42,7 +42,7 @@ namespace KidShop.Controllers
                     }
                     else
                     {
-                        List<int> listChildId = Common.findChild(categoryId);
+                        List<int> listChildId = KidShop.Controllers.Common.findChild(categoryId);
                         listChildId.Add(categoryId);
                         products = products.Where(s => listChildId.Contains((int)s.CategoryId));
                         ViewBag.CategoryName = c.CategoryName;
@@ -100,16 +100,23 @@ namespace KidShop.Controllers
             {
                 return HttpNotFound();
             }
-            var list = db.ProductDetail.Where(r => r.ProductId == id);
-            ViewBag.ListSizeColor = list.ToList();
+            var list = db.ProductDetail.Where(r => r.ProductId == id).ToList();
+            ViewBag.ListSizeColor = list;
 
-            List<string> listSize = list.GroupBy(r => r.Size).Select(r => r.Key).Distinct().ToList();
+            List<string> listSize = list.Select(r => r.Size).Distinct().ToList();
             ViewBag.ListSize = listSize;
 
-            List<string> listColor = list.GroupBy(r => r.Color).Select(r => r.Key).Distinct().ToList();
+            List<string> listColor = list.Select(r => r.Color).Distinct().ToList();
             ViewBag.ListColor = listColor;
 
-            ViewBag.ListProduct = db.Product.Where(r => r.CategoryId == product.CategoryId).Take(4).ToList();
+            var ListProduct = db.Product.Where(r => r.CategoryId == product.CategoryId).Take(4).ToList();
+            ViewBag.ListProduct = ListProduct;
+            if (list.Count() > 0)
+            {
+                product.Price = list[0].Price;
+                product.Qty = list[0].Qty;
+            }
+            
             return View(product);
         }
 
@@ -182,7 +189,5 @@ namespace KidShop.Controllers
             var image = db.ProductImage.Where(r => r.ProductId == productId);
             return PartialView(image.ToList());
         }
-
-
     }
 }
