@@ -14,24 +14,27 @@ namespace KidShop.Areas.Admin.Models.DataModel
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
 
-        [Display(Name="Tên đăng nhập")]
-        [StringLength(64)]
+        [StringLength(256)]
+        [Display(Name = "Họ")]
+        [Column(TypeName = "nvarchar")]
+        public string LastName { get; set; }
+
+
+        [StringLength(256)]
+        [Display(Name = "Tên")]
+        [Column(TypeName = "nvarchar")]
+        public string FirstName { get; set; }
+
+
+        [Display(Name="Email")]
         [Column(TypeName = "varchar")]
-        public string Username { get; set; }
+        [StringLength(256)]
+        public string Email { get; set; }
 
         [Column(TypeName = "varchar")]
         [StringLength(64)]
         [Display(Name="Mật khẩu")]
         public string Password { get; set; }
-
-        [StringLength(256)]
-        [Display(Name = "Họ và tên")]
-        [Column(TypeName = "nvarchar")]
-        public string FullName { get; set; }
-
-        [Column(TypeName = "varchar")]
-        [StringLength(256)]
-        public string Email { get; set; }
 
         [Display(Name = "Ảnh đại diện")]
         [Column(TypeName = "varchar")]
@@ -39,7 +42,7 @@ namespace KidShop.Areas.Admin.Models.DataModel
         public string Avatar { get; set; }
 
         [Display(Name="Quản trị viên")]
-        public bool isAdmin { get; set; }
+        public int Role { get; set; }
 
         [Display(Name="Kích hoạt")]
         public bool Allowed { get; set; }

@@ -64,7 +64,7 @@
 
     // Custom nav for products care slider
     var owl2 = $("#product-care");
-    z
+
     owl2.owlCarousel();
 
     // Custom Navigation Events
