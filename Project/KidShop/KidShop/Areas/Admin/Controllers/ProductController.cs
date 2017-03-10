@@ -6,15 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-<<<<<<< HEAD
 using System.IO;
 using KidShop.Areas.Admin.Models.DataModel;
 using KidShop.Areas.Admin.Models.BusinessModel;
-=======
-using KidShop.Areas.Admin.Models.DataModel;
-using KidShop.Areas.Admin.Models.BusinessModel;
-using System.IO;
->>>>>>> origin/master
 using KidShop.Areas.Admin.Models.ViewModel;
 
 namespace KidShop.Areas.Admin.Controllers
@@ -29,7 +23,7 @@ namespace KidShop.Areas.Admin.Controllers
         /*--------------------------------INDEX-----------------------------------*/
         public ActionResult Index(int page = 1, int pageSize = 10)
         {
-            var product = db.Product.OrderByDescending(m => m.ProductId).Include(p => p.Category).Skip((page-1)*pageSize).Take(pageSize);
+            var product = db.Product.OrderByDescending(m => m.ProductId).Include(p => p.Category).Skip((page - 1) * pageSize).Take(pageSize);
             return View(product.ToList());
         }
 
@@ -149,14 +143,14 @@ namespace KidShop.Areas.Admin.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var product = db.Product.Include(x=>x.ProductDetails).FirstOrDefault(x=>x.ProductId == id);
+            var product = db.Product.Include(x => x.ProductDetails).FirstOrDefault(x => x.ProductId == id);
             if (product == null)
             {
                 return HttpNotFound();
             }
             List<GetCategory> Cate = new List<GetCategory>();
             ViewBag.CategoryId = new SelectList(new GetCategory().getCategory(0, "", Cate), "CategoryId", "CategoryName", product.CategoryId);
-            
+
             return View(product);
         }
 
@@ -198,7 +192,7 @@ namespace KidShop.Areas.Admin.Controllers
                 db.SaveChanges();
 
                 // Lưu chi tiết sản phẩm
-                product.Qty = (Qty_detail == 0) ? product.Qty : Qty_detail; 
+                product.Qty = (Qty_detail == 0) ? product.Qty : Qty_detail;
                 for (int i = 0; i < tags_color.Length; i++)
                 {
                     for (int j = 0; j < tags_size.Length; j++)
@@ -231,8 +225,8 @@ namespace KidShop.Areas.Admin.Controllers
                             string newfilename2 = Common.EncryptMD5(DateTime.Now.ToBinary().ToString()) + extensionFile2;
                             db.ProductImage.Add(new ProductImage()
                             {
-                                 ImageName = newfilename2,
-                                 ProductId = product.ProductId
+                                ImageName = newfilename2,
+                                ProductId = product.ProductId
                             });
                             string path2 = Path.Combine(Server.MapPath("~/Areas/Admin/Content/Images/ProductImages"), newfilename2);
                             item.SaveAs(path2);
@@ -261,7 +255,7 @@ namespace KidShop.Areas.Admin.Controllers
                 }
                 db.SaveChanges();
 
-                product.Image = db.ProductImage.Where(x=>x.ProductId == product.ProductId).Select(x=>x.ImageName).FirstOrDefault();
+                product.Image = db.ProductImage.Where(x => x.ProductId == product.ProductId).Select(x => x.ImageName).FirstOrDefault();
 
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -285,7 +279,7 @@ namespace KidShop.Areas.Admin.Controllers
                     System.IO.File.Delete(path);
                 }
             }
-            
+
             //Xóa file image
             Product product = db.Product.Find(id);
             string fullpath = Request.MapPath("~/Areas/Admin/Content/Images/Product/" + product.Image);
@@ -379,7 +373,7 @@ namespace KidShop.Areas.Admin.Controllers
             int rows = db.Product.Count();
             float temp = (float)rows / items;
             int sum = (temp - (int)temp != 0) ? (int)temp + 1 : (int)temp;
-            return Json(new { total = sum}, JsonRequestBehavior.AllowGet);
+            return Json(new { total = sum }, JsonRequestBehavior.AllowGet);
         }
 
         // Lấy danh sách sản phẩm
@@ -433,7 +427,7 @@ namespace KidShop.Areas.Admin.Controllers
         public JsonResult GetProductDetail(int id)
         {
             var rs = db.ProductDetail.Select(x => new { x.ProductId, x.Color, x.Size, x.Qty, x.Price }).Where(x => x.ProductId == id);
-            return Json( rs, JsonRequestBehavior.AllowGet);
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
 

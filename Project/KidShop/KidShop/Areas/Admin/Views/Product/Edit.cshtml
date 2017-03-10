@@ -208,7 +208,7 @@
         paramName: "file",
         maxFilesize: 2,
         maxFiles: 8,
-        url: "/Product/UploadFile",
+        url: "/Admin/Product/UploadFile",
         acceptedFiles: "image/*",
         init: function () {
             var thisDropzone = this;
@@ -251,7 +251,7 @@
             var name = file.name;
             $.ajax({
                 type: 'POST',
-                url: '/Product/DeleteFileImage_Edit',
+                url: '/Admin/Product/DeleteFileImage_Edit',
                 data: "id=" + name
             });
             var _ref;
@@ -350,7 +350,7 @@
         $(window).bind("load", function () {
             $.ajax({
                 type: 'GET',
-                url: '/Product/Load'
+                url: '/Admin/Product/Load'
             });
         });
     });

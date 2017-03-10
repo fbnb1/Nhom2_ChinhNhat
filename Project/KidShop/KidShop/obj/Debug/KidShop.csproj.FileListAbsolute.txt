@@ -63,3 +63,7 @@ D:\OneDrive\Workspace\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\PagedList.dll
 D:\OneDrive\Workspace\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\PagedList.Mvc.dll
 D:\OneDrive\Workspace\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\PagedList.xml
 D:\OneDrive\Workspace\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\PagedList.Mvc.xml
+E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\PagedList.dll
+E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\PagedList.Mvc.dll
+E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\PagedList.xml
+E:\Documents\GitHub\Nhom2_ChinhNhat\Project\KidShop\KidShop\bin\PagedList.Mvc.xml
