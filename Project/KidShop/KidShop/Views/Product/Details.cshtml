@@ -1,8 +1,8 @@
-﻿@model KidShop.Areas.Admin.Models.DataModel.Product
+﻿@model KidShop.Areas.Admin.Models.DataModel.ProductDetail
 @using System.Configuration
 @using KidShop.Areas.Admin.Models.DataModel
 @{
-    ViewBag.Title = Model.ProductName;
+    ViewBag.Title = Model.Product.ProductName;
 }
 
 <!--ScripFB-->
@@ -17,42 +17,91 @@
 }(document, 'script', 'facebook-jssdk'));</script>
 <!--EndScripFB-->
 
-<script>
-    var list = [];
-    @foreach(var item in ViewBag.ListSizeColor)
-    {
-        <text>
-    list.push({ size: "@item.Size", color: "@item.Color", qty: @item.Qty, price: @item.Price });
-    </text>
-    }
+<!--ScripAjax-->
+<script type="text/javascript">
 
-    function changeSizeColor(){
-        var size = document.getElementById("product-select-option-0").value;
-        var color = document.getElementById("product-select-option-1").value;
-        obj = list.find(function (obj) { return obj.size == size && obj.color == color });
-        if(obj == null || obj.qty <= 0){
-            document.getElementById("qty").innerHTML = "Hết hàng";
-        }
-        else{
-            document.getElementById("qty").innerHTML = "Còn hàng";
-        }
-        document.getElementById("price").innerHTML = obj.price - (obj.price * (@Model.Sale)/100) + "₫";
-        document.getElementById("oldPrice").innerHTML = obj.price + "₫";
-    }
+    //click add cart
+    $(function () {
+        $(".product-btn-buy").click(function () {
+            var qty = $('.single-input-selector').val();
+            var id = $("#product-detail-id").html();
+            if (id != '') {
+                $.post("/ShoppingCart/AddToCart", { "id": id, "qty":qty },
+                    function (data) {
+                        $('#cart-status').text(data.CartCount);
+                        $('#message').text(data.Message)
+                    });
+            }
+        });
+    });
 
-    function addCart(productId, quantity){
+    //change color
+    $(function () {
+        $("#product-color-selector").change(function(){
+            var color = $("#product-color-selector").val();
+            var id = parseInt($("#product-id").html());
+            if (color != '') {
+                $.post("/Product/ChangeColor", {"id" : id, "color": color },
+                    function (data) {
+                        if (data != null) {
+                            var option = "";
+                            $.each(data.listSize, function (key, value) {
+                                option += "<option value='" + value + "'>" + value + "</option>";
+                            });
+                            $('#product-size-selector').html(option);
+                            $('.old-price').html(data.OldPrice);
+                            $('.price').html(data.SalePrice);
+                            $('#qty').html(data.StatusQty);
+                            $('#product-detail-id').html(data.productDetailId);
+                        }
+                    });
+            }
+        });
+    });
 
-    }
-
-
+    //change size
+    $(function () {
+        $("#product-size-selector").change(function(){
+            var color = $("#product-color-selector").val();
+            var size = $("#product-size-selector").val();
+            var id = parseInt($("#product-id").html());
+            if (color != '') {
+                $.post("/Product/ChangeSize", { "id": id, "color": color, "size" : size },
+                    function (data) {
+                        if (data != null) {
+                            $('.old-price').html(data.OldPrice);
+                            $('.price').html(data.SalePrice);
+                            $('#qty').html(data.StatusQty);
+                            $('#product-detail-id').html(data.productDetailId);
+                        }
+                    });
+            }
+        });
+    });
 </script>
-<!-- Main Content -->
+<!--EndScripAjax-->
 
-<div id="add_succes" style="display:none;">
-    <p><i class="fa fa-check fa-2x"></i>Thêm sản phẩm thành công</p>
+<!--MessegeBoxAddToCart-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Thông báo.</h4>
+            </div>
+            <div class="modal-body">
+                <p id="message"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"  data-dismiss="modal">Tiếp tục mua sắm</button>
+                <button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "ShoppingCart")'">Đến giỏ hàng</button>
+            </div>
+        </div>
+    </div>
 </div>
+<!--EndMessegeBoxAddToCart-->
 
-
+<!-- Main Content -->
 <div class="category-page-layout">
     <div class="container">
         <div class="row">
@@ -64,39 +113,40 @@
                     </div>
                     <div class="col-md-6 col-sm-12 col-xs-12">
                         <div class="sk-page-detail-title">
-                            <h1 itemprop="name" class="pd-name">@Model.ProductName</h1>
+                            <h1 itemprop="name" class="pd-name">@Model.Product.ProductName</h1>
                         </div>
                         <div class="share">
                             <div class="fb-like" data-href="@Request.Url" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
                         </div>
                         <div class="sk-price-box clearfix">
                             <div class="pull-left">
-                                @if (Model.Sale > 0)
+                                @if (Model.Product.Sale > 0)
                                 {
                                     <div class="sale">
                                         <span>Giá gốc:</span>
-                                        <del class="old-price" id="oldPrice">
+                                        <del class="old-price">
                                             @Model.Price₫
                                         </del>
                                     </div>
                                 }
                                 <span>Giá:</span>
-                                <span class="price" id="price">
+                                <span class="price">
                                     @{ 
                                         int price = (int)Model.Price;
-                                        price = price - (price * (int)Model.Sale/100);
+                                        price = price - (price * (int)Model.Product.Sale / 100);
                                         @price
                                     }₫
                                 </span>
                             </div>
                             <div class="stock pull-left">
-                                <div class="availability in-stock pull-right"><span id="qty">Còn hàng</span></div>
+                                <div class="availability in-stock pull-right"><span id="qty">@{string status = (Model.Qty > 0) ? "Còn hàng" : "Hết hàng";} @status </span></div>
                             </div>
                         </div>
                         <ul class="sk-product-info-wrap">
                             <li>
                                 <span>Mã sản phẩm:</span>
-                                <span>@Model.ProductId</span>
+                                <span id="product-detail-id">@Model.ProductDetailId</span>
+                                <span id="product-id" style="display: none;">@Model.ProductId</span>
                             </li>
                             <li>
                                 <span>Thương hiệu:</span>
@@ -104,33 +154,46 @@
                             </li>
                         </ul>
                         <p class="pd-description-mini">
-                            @Model.Description
+                            
                         </p>
                         <div class="pd-form">
                             <div class="pd-form-top clearfix">
                                 <div class="selector-wrapper clearfix">
-                                    <label for="product-select-option-0">Kích thước</label>
-                                    <select class="single-option-selector" on="changeSizeColor()" onchange="changeSizeColor()" id="product-select-option-0">
-                                        @foreach (var item in ViewBag.ListSize)
+                                    <label for="product-select-option-1">Màu sắc</label>
+                                    <select class="single-option-selector" id="product-color-selector">
+                                        @foreach (var item in ViewBag.ListColor)
                                         {
-                                            <option value="@item">@item</option>
+                                            if (item == Model.Color)
+                                            {
+                                                <option value="@item" selected>@item</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item">@item</option>
+                                            }
                                         }
                                     </select>
                                 </div>
                                 <div class="selector-wrapper clearfix">
-                                    <label for="product-select-option-1">Màu sắc</label>
-                                    <select class="single-option-selector" onchange="changeSizeColor()" id="product-select-option-1">
-                                        @foreach (var item in ViewBag.ListColor)
+                                    <label for="product-select-option-0">Kích thước</label>
+                                    <select class="single-option-selector" id="product-size-selector">
+                                        @foreach (var item in ViewBag.ListSize)
                                         {
-                                            <option value="@item">@item</option>
+                                            if (item == Model.Size)
+                                            {
+                                                <option value="@item" selected>@item</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item">@item</option>
+                                            }
                                         }
                                     </select>
                                 </div>
                             </div>
                             <div class="pd-form-bottom clearfix">
                                 <input type="number" value="1" class="single-input-selector" name="quantity" placeholder="Số lượng">
-                                <input type="hidden" name="variantId" value="6383573" />
-                                <button class="button product-btn-buy" title="Đặt hàng" type="submit" onclick="Bizweb.addItem(6383573, 1, cartItem)"><span>Đặt hàng</span></button>
+                                <button class="button product-btn-buy" title="Đặt hàng" type="button" data-toggle="modal" data-target="#myModal"><span>Đặt hàng</span></button>
                             </div>
                             <div class="sk-hotline-block">
                                 <span>Gọi ngay để được tư vấn mua hàng !</span>
@@ -147,6 +210,18 @@
                     </div>
             </article>
             <article class="col-lg-8 col-md-8 col-sm-12 col-xs-12 sk-product-detail-content-col">
+                <div class="sk-related-product-list">
+                    <div class="product-care-title">
+                        <h2>
+                            Thông tin sản phẩm
+                        </h2>
+                    </div>
+                    <div class="sk-related-product-listing">
+                        <div class="tab-pane" id="pd-thong-tin">
+                            @Model.Product.Description
+                       </div>
+                    </div>
+                </div>
                 <div class="sk-pt-wrap">
                     <div class="fb-comments" data-href="@Request.Url" data-width="100%" data-numposts="10"></div>
                 </div>
@@ -161,7 +236,7 @@
                         @foreach (Product item in ViewBag.ListProduct)
                         {
                             <div class="sk-related-product-item col-md-3 col-sm-6 col-xs-12">
-                                @Html.Partial("~/Views/Product/PartialProduct.cshtml", item)
+                               @Html.Partial("~/Views/Product/PartialProduct.cshtml", item)
                             </div>
                         }
                     </div>
@@ -182,5 +257,3 @@
     </div>
 </div>
 <!-- End Main Content -->
-
-

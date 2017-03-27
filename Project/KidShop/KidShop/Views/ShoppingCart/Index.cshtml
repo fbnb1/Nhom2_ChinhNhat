@@ -1,0 +1,185 @@
+﻿@model KidShop.Areas.Admin.Models.ViewModel.ShoppingCartViewModel
+@{
+    ViewBag.Title = "Shopping Cart";
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        // Document.ready -> link up remove event handler
+        $(".RemoveLink").click(function () {
+            // Get the id from the link
+            var recordToDelete = $(this).attr("data-id");
+            if (recordToDelete != '') {
+                // Perform the ajax post
+                $.post("/ShoppingCart/RemoveFromCart", { "id": recordToDelete },
+                    function (data) {
+                        // Successful requests get here
+                        // Update the page elements
+                        if (data.ItemCount == 0) {
+                            $('#row-' + data.DeleteId).fadeOut('slow');
+                        } else {
+                            $('#item-count-' + data.DeleteId).text(data.ItemCount);
+                        }
+                        $('#cart-total').text(data.CartTotal);
+                        $('#update-message').text(data.Message);
+                        $('#cart-status').text(data.CartCount);
+                    });
+            }
+        });
+    });
+</script>
+<h3>
+    <em>Review</em> your cart:
+</h3>
+@{
+
+    if (Model.CartItems.Count > 0)
+    {
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Order Summary</h3>
+            </div>
+            <div class="panel-body">
+                <div id="update-message">
+                </div>
+                <table class="table table-striped table-hover ">
+                    <thead>
+                        <tr>
+                            <th>
+                                Item Name
+                            </th>
+                            <th>
+                                Price (each)
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model.CartItems)
+                    {
+                        <tr id="row-@item.ProductDetailId">
+                            <td>
+                                @Html.ActionLink(item.ProductDetail.Product.ProductName, "Details", "Store", new { id = item.ID }, null)
+                            </td>
+                            <td>
+                                @item.ProductDetail.Price
+                            </td>
+                            <td id="item-count-@item.ProductDetailId">
+                                @item.Count
+                            </td>
+                            <td>
+                                <a href="#" class="RemoveLink"
+                                   data-id="@item.ProductDetailId">
+                                    Remove
+                                    from cart
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                    <tr class="info">
+                        <td>
+                            Total
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td id="cart-total">
+                            @Model.CartTotal
+                        </td>
+                    </tr>
+                </table>
+                <button type="button" class="btn btn-success btn-sm" onclick="location.href='@Url.Action("AddressAndPayment", "Checkout")'">
+                    Check Out &raquo;
+                </button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div>
+            <p>
+                There are no items in your cart currently. Please shop for something and add items..
+            </p>
+        </div>
+    }
+}
+<!-- Main Content -->
+<div class="main-content">
+    <div class="container">
+        @if (Model.CartItems.Count > 0)
+        {
+            <div class="row cart cart_table">
+                <form method="post" action="/cart">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered cart-table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Hình ảnh</th>
+                                        <th class="text-center">Tên sản phẩm</th>
+                                        <th class="text-center">Đơn giá</th>
+                                        <th class="text-center">Số lượng</th>
+                                        <th class="text-center">Thành tiền</th>
+                                        <th class="text-center">Xóa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.CartItems)
+                                    {
+                                        <tr>
+                                            <td class="text-center">
+                                                <a href="@Url.Action("Details", "Product", new { id = item.ProductDetail.ProductId})">
+                                                    <img style="height: 100px" alt="@item.ProductDetail.Product.ProductName - @item.ProductDetail.Size / @item.ProductDetail.Color" src="~/Areas/Admin/Content/Images/ProductImages/@item.ProductDetail.Product.Image">
+                                                </a>
+                                            </td>
+                                            <td class="text-center" valign="middle">
+                                                <p class="">
+                                                    <a href="@Url.Action("Details", "Product", new { id = item.ProductDetail.ProductId})">@item.ProductDetail.Product.ProductName</a><br>
+                                                    @item.ProductDetail.Size / @item.ProductDetail.Color
+                                                </p>
+                                            </td>
+                                            <td class="text-center"><p class="">@item.ProductDetail.Price₫</p></td>
+                                            <td class="text-center"><input type="text" class="item-quantity" value="@item.ProductDetail.ProductId" name="Lines" id="updates_2048896"></td>
+                                            <td class="text-center"><p class="l">@item.ThanhTien₫</p></td>
+                                            <td class="text-center">
+                                                <a href="#" class="RemoveLink fa fa-trash-o item-remove"
+                                                   data-id="@item.ProductDetailId">
+                                                    Remove
+                                                    from cart
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-9 col-xs-12">
+                        <a href="/" class="btn-cart next">Mua hàng tiếp</a>
+                        <button class="btn-cart">Cập nhật</button>
+                    </div>
+
+                    <div class="col-md-3 col-xs-12">
+                        <table class="table table-bordered total-table">
+                            <tr>
+                                <td class="text-right">Tổng tiền</td>
+                                <td class="text-right">735.000₫</td>
+                            </tr>
+                        </table>
+                        <a href="/checkout" class="btn-cart pull-right">Thanh toán</a>
+                    </div>
+                </form>
+            </div>
+        }
+        else
+        {
+        <div>
+            <p>
+                There are no items in your cart currently. Please shop for something and add items..
+            </p>
+        </div>
+        }
+    </div>
+</div>
+<!-- End Main Content -->

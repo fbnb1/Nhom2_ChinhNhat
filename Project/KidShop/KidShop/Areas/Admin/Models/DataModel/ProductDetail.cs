@@ -31,7 +31,7 @@ namespace KidShop.Areas.Admin.Models.DataModel
         public int Qty { get; set; }
 
         [Display(Name="Giá")]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         public bool Status { get; set; }
 

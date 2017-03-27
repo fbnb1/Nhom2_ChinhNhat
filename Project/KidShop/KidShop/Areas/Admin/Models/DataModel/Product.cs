@@ -34,7 +34,7 @@ namespace KidShop.Areas.Admin.Models.DataModel
         [Required(ErrorMessage="Vui lòng nhập giá sản phẩm")]
         [DisplayFormat(DataFormatString="c,0")]
         [DataType(DataType.Currency)]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         [Display(Name = "Số lượng")]
         [Required(ErrorMessage="Vui lòng nhập số lượng sản phẩm")]
@@ -44,7 +44,7 @@ namespace KidShop.Areas.Admin.Models.DataModel
         public string Image { get; set; }
 
         [Display(Name = "Khuyến mại")]
-        public double Sale { get; set; }
+        public int Sale { get; set; }
 
         [Display(Name = "Ngày tạo")]
         public DateTime? CreateDate { get; set; }

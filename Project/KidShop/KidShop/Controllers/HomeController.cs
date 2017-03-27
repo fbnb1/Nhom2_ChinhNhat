@@ -41,5 +41,26 @@ namespace KidShop.Controllers
         {
             return PartialView(db.Product.Where(r => r.Sale > 0).Take(8).ToList());
         }
+
+        public PartialViewResult PartialTopOrder()
+        {
+            var products = db.OrderDetails.GroupBy(x => x.ProductDetail.Product).Select(y => new { Id = y.Key, Qty = y.Sum(z => z.Quantity) }).OrderByDescending(k => k.Qty).Take(12).Select(r => r.Id).ToList();
+            return PartialView(products);
+        }
+
+        public PartialViewResult PartialSlider()
+        {
+            return PartialView();
+        }
+
+        public PartialViewResult PartialHotProduct()
+        {
+            return PartialView();
+        }
+
+        public PartialViewResult PartialHotNews()
+        {
+            return PartialView();
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace KidShop.Areas.Admin.Models.DataModel
         public string CartId { get; set; }
         public int ProductDetailId { get; set; }
         public int Count { get; set; }
+        public Decimal ThanhTien { get; set; }
         public System.DateTime DateCreated { get; set; }
         public virtual ProductDetail ProductDetail { get; set; }
     }

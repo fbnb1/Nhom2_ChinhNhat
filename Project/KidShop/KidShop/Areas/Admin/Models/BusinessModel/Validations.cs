@@ -21,4 +21,24 @@ namespace KidShop.Areas.Admin.Models.BusinessModel
             }
         }
     }
+
+    public class EmailValidation : ValidationAttribute
+    {
+        KidShopDbContext db = new KidShopDbContext();
+        protected override ValidationResult IsValid(object value, ValidationContext validationcontext)
+        {
+            if(value == null)
+            {
+                return new ValidationResult("Email không được để trống.");
+            }
+            if (db.Account.Any(user => user.Email == value.ToString()))
+            {
+                return new ValidationResult("Email này đã được đăng ký. Vui lòng thử lại.");
+            }
+            else
+            {
+                return ValidationResult.Success;
+            }
+        }
+    }
 }

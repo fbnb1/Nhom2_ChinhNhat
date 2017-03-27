@@ -1,5 +1,6 @@
 ﻿using KidShop.Areas.Admin.Models.BusinessModel;
 using KidShop.Areas.Admin.Models.DataModel;
+using KidShop.Areas.Admin.Models.ViewModel;
 using PagedList;
 using System;
 using System.Collections.Generic;
@@ -14,45 +15,87 @@ namespace KidShop.Controllers
     {
         private KidShopDbContext db = new KidShopDbContext();
         // GET: Product
-        public ActionResult Index(int? id, string sortOrder, int? page)
+        public ActionResult Index(int? id, string searchString, string sortOrder, int page = 1)
         {
-            sortOrder = String.IsNullOrEmpty(sortOrder) ? "date-desc" : sortOrder;
-            ViewBag.CurrentSort = sortOrder;
-
-            var products = from s in db.Product
-                           select s;
-
             int categoryId = id ?? 0;
-            ViewBag.CategoryId = id;
+            
 
+            var products = from s in db.Product select s;
 
-            if (id != null) // id = null thi lay tat ca san pham
+            //tất cả các danh mục id có id cha là categoryId
+            List<int> categoryIds = KidShop.Controllers.Common.findChild(categoryId);
+            categoryIds.Add(categoryId);
+
+            products = products.Where(s => categoryIds.Contains((int)s.CategoryId));
+
+            if (!String.IsNullOrEmpty(searchString))
             {
-                if (id == 0) // id = 0 la san pham khuyen mai
-                {
-                    products = products.Where(s => (int)s.Sale != 0);
-                    ViewBag.CategoryName = "Khuyến mại";
-                }
-                else
-                {
-                    Category c = db.Category.Find(id);
-                    if (c == null)
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        List<int> listChildId = KidShop.Controllers.Common.findChild(categoryId);
-                        listChildId.Add(categoryId);
-                        products = products.Where(s => listChildId.Contains((int)s.CategoryId));
-                        ViewBag.CategoryName = c.CategoryName;
-                    }
-                }
+                products = db.Product.Where(p => p.ProductName.ToLower().Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "price":
+                    products = products.OrderBy(s => s.Price);
+                    break;
+
+                case "price-desc":
+                    products = products.OrderByDescending(s => s.Price);
+                    break;
+
+                case "name":
+                    products = products.OrderBy(s => s.ProductName);
+                    break;
+                case "name-desc":
+                    products = products.OrderByDescending(s => s.ProductName);
+                    break;
+
+                case "date":
+                    products = products.OrderBy(s => s.CreateDate);
+                    break;
+
+                default:  // Date ascending 
+                    products = products.OrderByDescending(s => s.CreateDate);
+                    break;
+            }
+
+            
+            int pageSize = 12;
+
+            if (Request.IsAjaxRequest())
+            {
+                return (ActionResult)PartialView("ProductList", products.ToPagedList(page, pageSize));
             }
             else
             {
-                ViewBag.CategoryName = "Tất cả sản phẩm";
+                Category category = new Category();
+                if (categoryId == 0)
+                {
+                    category.CategoryId = 0;
+                    category.CategoryName = "Tất cả sản phẩm";
+                }
+                else
+                {
+                    category = db.Category.Find(categoryId);
+                    if (category == null)
+                    {
+                        return HttpNotFound();
+                    }
+                }
+                ViewBag.Category = category;
+                return View(products.ToPagedList(page, pageSize));
             }
+        }
+
+
+        public PartialViewResult ProductList(int? id, string sortOrder, int? page)
+        {
+            int categoryId = id ?? 0;
+            sortOrder = String.IsNullOrEmpty(sortOrder) ? "date-desc" : sortOrder;
+
+            var products = from s in db.Product select s;
+            List<int> listChildId = KidShop.Controllers.Common.findChild(categoryId);
+            products = products.Where(s => listChildId.Contains((int)s.CategoryId));
 
             switch (sortOrder)
             {
@@ -86,7 +129,7 @@ namespace KidShop.Controllers
 
             int pageSize = 12;
             int pageNumber = (page ?? 1);
-            return View(products.ToPagedList(pageNumber, pageSize));
+            return PartialView(products.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult Details(int? id)
@@ -95,29 +138,62 @@ namespace KidShop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Product.Find(id);
-            if (product == null)
+
+            ProductDetail productDetail = db.ProductDetail.Find(id);
+            if (productDetail == null)
             {
                 return HttpNotFound();
             }
-            var list = db.ProductDetail.Where(r => r.ProductId == id).ToList();
-            ViewBag.ListSizeColor = list;
 
-            List<string> listSize = list.Select(r => r.Size).Distinct().ToList();
-            ViewBag.ListSize = listSize;
-
-            List<string> listColor = list.Select(r => r.Color).Distinct().ToList();
+            List<string> listColor = db.ProductDetail.Where(r => r.ProductId == productDetail.ProductId).Select(r => r.Color).Distinct().ToList();
             ViewBag.ListColor = listColor;
 
-            var ListProduct = db.Product.Where(r => r.CategoryId == product.CategoryId).Take(4).ToList();
+            List<string> listSize = db.ProductDetail.Where(r => r.ProductId == productDetail.ProductId && r.Color == productDetail.Color).Select(r => r.Size).Distinct().ToList();
+            ViewBag.listSize = listSize;
+
+            //sản phẩm liên quan
+            var ListProduct = db.Product.Where(r => r.CategoryId == productDetail.Product.CategoryId && r.ProductId != productDetail.ProductId).Take(4).ToList();
             ViewBag.ListProduct = ListProduct;
-            if (list.Count() > 0)
-            {
-                product.Price = list[0].Price;
-                product.Qty = list[0].Qty;
-            }
             
-            return View(product);
+            return View(productDetail);
+        }
+
+        [HttpPost]
+        public ActionResult ChangeColor(int id, string color)
+        {
+            List<ProductDetail> list = db.ProductDetail.Where(r => r.ProductId == id && r.Color == color).ToList();
+            if(list.Count() != 0)
+            {
+                var productDetail = list.FirstOrDefault();
+                var results = new ColorSizeViewModel
+                {
+                    listSize = list.Select(r => r.Size).Distinct().ToList(),
+                    productDetailId = productDetail.ProductDetailId,
+                    OldPrice = productDetail.Price.ToString(),
+                    SalePrime = (productDetail.Product.Sale > 0) ? (productDetail.Price - (productDetail.Price * productDetail.Product.Sale / 100)).ToString() : productDetail.Price.ToString(),
+                    StatusQty = (productDetail.Qty>0)?"Còn hàng":"Hết hàng"
+                };
+                return Json(results);
+            }
+            return null;
+        }
+
+        [HttpPost]
+        public ActionResult ChangeSize(int id, string color, string size)
+        {
+            ProductDetail productDetail = db.ProductDetail.FirstOrDefault(r => r.ProductId == id && r.Color == color&&r.Size == size);
+            if (productDetail != null)
+            {
+                var results = new ColorSizeViewModel
+                {
+                    productDetailId = productDetail.ProductDetailId,
+                    OldPrice = productDetail.Price.ToString(),
+                    SalePrime = (productDetail.Product.Sale > 0) ? (productDetail.Price - (productDetail.Price * productDetail.Product.Sale / 100)).ToString() : productDetail.Price.ToString(),
+                    StatusQty = (productDetail.Qty > 0) ? "Còn hàng" : "Hết hàng"
+                };
+                return Json(results);
+            }
+            return null;
         }
 
         public PartialViewResult PartialProductUrl(int? id, int? product)

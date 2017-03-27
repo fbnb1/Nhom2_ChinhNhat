@@ -1,4 +1,5 @@
 ﻿@model List<KidShop.Areas.Admin.Models.DataModel.Product>
+@using KidShop.Areas.Admin.Models.DataModel
 
 <div class="sk-leftSidebar-widget sellingProducts-widget">
     <div class="sk-widget-title pink-bg-widget">
@@ -13,28 +14,32 @@
           <div class="item">
                 @for (int i = 0; i < Model.Count(); i++)
                 {
-                    if (i % 4 == 0&&i>0)
+                    if (i % 4 == 0 && i > 0)
                     {
                           @:</div><div class="item">
                     }
+                    ProductDetail productDetail = Model[i].ProductDetails.OrderByDescending(r => r.Qty).FirstOrDefault();
+
                             <div class="sellingProducts-item">
                                 <div class="col-md-5 col-sm-5 sellingProducts-image-wrap">
-                                    <a class="sellingProducts-image" href="@Url.Action("Details", "Product", new { id = Model[i].ProductId })">
-                                        <img src="~/Areas/Admin/Content/Images/Product/@Model[i].ProductImages" alt="@Model[i].ProductName" class="img-responsive">
+                                    <a class="sellingProducts-image" href="@Url.Action("Details", "Product", new { id = productDetail.ProductDetailId })">
+                                        <img src="~/Areas/Admin/Content/Images/ProductImages/@Model[i].Image" alt="@Model[i].ProductName" class="img-responsive">
                                     </a>
                                 </div>
                                 <div class="col-md-7 col-sm-7">
                                     <div class="item-info">
                                         <h3 class="item-title">
-                                            <a href="@Url.Action("Details", "Product", new { id = Model[i].ProductId })" title="@Model[i].ProductName">@Model[i].ProductName</a>
+                                            <a href="@Url.Action("Details", "Product", new { id = productDetail.ProductDetailId })" title="@Model[i].ProductName">@Model[i].ProductName</a>
                                         </h3>
                                         <div class="price-box">
-                                            <span class="price">@Model[i].Sale₫</span>
+                                            @{
+                                                int price = (int)productDetail.Price;
+                                                price = price - (price * (int)Model[i].Sale / 100);
+                                            }
+                                            <span class="price">@price₫</span>
 
                                             <span class="price-compare">
-
-                                                @Model[i].Price₫
-
+                                                @productDetail.Price₫
                                             </span>
 
                                         </div>

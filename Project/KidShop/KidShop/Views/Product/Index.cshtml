@@ -1,26 +1,185 @@
-﻿@model PagedList.IPagedList<KidShop.Areas.Admin.Models.DataModel.Product>
-@using PagedList.Mvc;
+﻿@model IEnumerable<KidShop.Areas.Admin.Models.DataModel.Product>
 @using System.Configuration;
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "Sản phẩm";
+    ViewBag.Title = ViewBag.Category.CategoryName;
 }
+
+
+@*<script type="text/javascript">
+        $(function () {
+            $("#sort").change(function () {
+                var stringSort = $("#sort").val();
+                xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        document.getElementById("product-list").innerHTML = xmlhttp.responseText;
+                    }
+                };
+                xmlhttp.open("GET", "@Url.Action("ProductList", "Product", new { id = Model.CategoryId })" + "?sortOrder=" + stringSort, true);
+                xmlhttp.send();
+            });
+        });
+    </script>*@
+
+
+<script type="text/javascript">
+        // Adding popstate event listener to handle browser back button
+        window.addEventListener("popstate", function (e) {
+          //  window.location.href = "http://www.google.com";
+        });
+
+        function ChangeUrl(page, url) {
+            if (typeof (history.pushState) != "undefined") {
+                var obj = { Page: page, Url: url };
+                history.pushState(null, obj.Page, obj.Url);
+            } else {
+                alert("Browser does not support HTML5.");
+            }
+        }
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        function search() {
+            $.ajax({
+                url: "/Product/Index?searchString=" + $('#SearchString').val(),
+                success: function(result) {
+                    ChangeUrl("index", "/Product/Index?searchString=" + $('#SearchString').val());
+                    $('#product-list').html(result);
+                }
+            });
+        }
+
+        $(function() {
+            $("#btnSearch").click(function() {
+                search();
+            });
+
+            $("#SearchString").keypress(function(e) {
+                if (e.keyCode == 13) {
+                    search();
+                }
+            });
+            $('body').on('click', '#product-list .pagination a', function (event) {
+                event.preventDefault();
+                console.log('page');
+                var searchString = $('#SearchString').val();
+                if (searchString == undefined || searchString == '') {
+                    searchString = '';
+                } else {
+                    searchString = '&searchString=' + searchString;
+                }
+                var url = $(this).attr('href') + searchString;
+                console.log(url);
+                $.ajax({
+                    url: url,
+                    success: function(result) {
+                        ChangeUrl('index', url);
+                        $('#product-list').html(result);
+                    }
+                });
+            });
+
+
+            $('body').on('click', '#product-list .table a', function (event) {
+
+                event.preventDefault();
+
+                var searchString = $('#SearchString').val();
+                if (searchString == undefined || searchString == '') {
+                    searchString = '';
+                } else {
+                    searchString = '&searchString=' + searchString;
+                }
+
+                var columnToSort = $(this).text();
+                var currentSortOption = getUrlVars()['sortOption'];
+                console.log(currentSortOption);
+                var sort;
+                switch (currentSortOption) {
+                case "name_acs":
+                    sort = 'sortOption=name_desc';
+                    break;
+                case "name_desc":
+                    sort = 'sortOption=name_acs';
+                    break;
+                case "price_acs":
+                    sort = 'sortOption=price_desc';
+                    break;
+                case "price_desc":
+                    sort = 'sortOption=price_acs';
+                    break;
+                case "qty_acs":
+                    sort = 'sortOption=qty_desc';
+                    break;
+                case "qty_desc":
+                    sort = 'sortOption=qty_acs';
+                    break;
+                default:
+                    sort = '';
+                    break;
+                }
+
+
+                switch (columnToSort) {
+                case 'Name':
+                    if (currentSortOption != 'name_acs' && currentSortOption != 'name_desc') {
+                        sort = 'sortOption=name_acs';
+                    }
+                    break;
+                case 'Price':
+                    if (currentSortOption != 'price_acs' && currentSortOption != 'price_desc') {
+                        sort = 'sortOption=price_acs';
+                    }
+                    break;
+                case 'Qty':
+                    if (currentSortOption != 'qty_acs' && currentSortOption != 'qty_decs') {
+                        sort = 'sortOption=qty_acs';
+                    }
+                    break;
+                default:
+                    sort = '';
+                    break;
+
+                }
+                if (sort != '' & searchString != '') {
+                    sort = '&' + sort;
+                }
+                var url = '/Home/Index?' + searchString + sort;
+                $.ajax({
+                    url: url,
+                    success: function(result) {
+                        ChangeUrl('index', url);
+                        $('#product-list').html(result);
+                    }
+                });
+            });
+
+        });
+
+</script>
+
 
 <div class="category-page-layout">
     <div class="container">
         <div class="row">
             <aside class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                
-                @Html.Action("PartialCategory", "Product", new { id = ViewBag.CategoryId })
-                
+                @Html.Action("PartialCategory", "Product", new { id = ViewBag.Category.CategoryId })
             </aside>
             <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-
                 <div class="sk-main-content-head">
                     <div class="row">
                         <div class="col-md-6 col-sm-6 breadcrumb-wrap">
-                            @Html.Action("PartialProductUrl", "Product", new { id = ViewBag.CategoryId })
+                            @Html.Action("PartialProductUrl", "Product", new { id = ViewBag.Category.CategoryId })
                         </div>
                         <div class="col-md-6 col-sm-6 head-hotline-wrap">
                             <div class="head-hotline-inner">
@@ -30,9 +189,8 @@
                         <div class="clearfix"></div>
                     </div>
                 </div>
-
                 <div class="sk-page-title">
-                    <h1>@ViewBag.CategoryName</h1>
+                    <h1>@ViewBag.Category.CategoryName</h1>
                 </div>
                 <div class="product-nav-wrap">
                     <div class="col-md-6 col-sm-6 sort-wrap no-padding-left">
@@ -42,86 +200,28 @@
                             <div id="sort-by">
                                 <form id="formSortBy" class="form-inline form-viewpro">
                                     <div class="form-group">
-                                        <select class="sort-by-script" id="" onchange="SortBy(this)">
+                                        <select class="sort-by-script" id="sort">
                                             <option value="default">Mặc định</option>
-
-                                            <option 
-                                            @if (ViewBag.CurrentSort == "price")
-                                            {
-                                                @: selected
-                                            }
-                                            value="price">Giá tăng dần</option>
-
-                                            <option
-                                            @if (ViewBag.CurrentSort == "price-desc")
-                                            {
-                                                @: selected
-                                            }
-                                            value="price-desc">Giá giảm dần</option>
-
-                                            <option
-                                            @if (ViewBag.CurrentSort == "name")
-                                            {
-                                                @: selected
-                                            }
-                                            value="name">Từ A-Z</option>
-
-                                            <option
-                                            @if (ViewBag.CurrentSort == "name-desc")
-                                            {
-                                                @: selected
-                                            }
-                                            value="name-desc">Từ Z-A</option>
-                                            
-                                            <option 
-                                            @if (ViewBag.CurrentSort == "date")
-                                            {
-                                                @: selected
-                                            }
-                                            value="date">Cũ đến mới</option>
-
-                                            <option 
-                                            @if (ViewBag.CurrentSort == "date-desc")
-                                            {
-                                                @: selected
-                                            } 
-                                            value="date-desc">Mới đến cũ</option>
+                                            <option value="price">Giá tăng dần</option>
+                                            <option value="price-desc">Giá giảm dần</option>
+                                            <option value="name">Từ A-Z</option>
+                                            <option value="name-desc">Từ Z-A</option>
+                                            <option value="date">Cũ đến mới</option>
+                                            <option value="date-desc">Mới đến cũ</option>
                                         </select>
-                                        <script type="text/javascript">
-                                            function SortBy(ddlFruits) {
-                                                var selectedText = ddlFruits.options[ddlFruits.selectedIndex].innerHTML;
-
-                                                var selectedValue = ddlFruits.value;
-
-                                                window.location.href = "@Url.Action("Index", "Product", new { id = ViewBag.CategoryId})" + "?sortOrder=" + selectedValue;
-                                                //document.getElementById("formSortBy").submit();
-                                            }
-                                        </script>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="sk-product-list">
-                    <div class="row">
-                        @foreach (var item in Model)
-                        {
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                                @Html.Partial("~/Views/Product/PartialProduct.cshtml", item)
-                            </div>
-                        }
-                    </div>
+                <div id="product-list">
+                    @Html.Partial("ProductList", Model)
                 </div>
-
-
-                <div class="sk-category-paging-wrap">
-                    <div class="pull-right">
-                        @Html.PagedListPager(Model, page => Url.Action("Index", new { ViewBag.CategoryId, sortOrder = ViewBag.CurrentSort, page }))
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
 </div>
+
+    
+

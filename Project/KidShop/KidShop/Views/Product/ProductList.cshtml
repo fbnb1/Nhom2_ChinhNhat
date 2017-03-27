@@ -1,0 +1,26 @@
+﻿@model PagedList.IPagedList<KidShop.Areas.Admin.Models.DataModel.Product>
+@using PagedList.Mvc;
+@using System.Configuration;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
+<div class="sk-product-list">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                @Html.Partial("~/Views/Product/PartialProduct.cshtml", item)
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="sk-category-paging-wrap">
+    <div class="pull-right">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+    </div>
+</div>
+
+       
+       

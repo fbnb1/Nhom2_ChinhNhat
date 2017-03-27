@@ -1,7 +1,10 @@
 ﻿@model KidShop.Areas.Admin.Models.DataModel.Product
-
+@using KidShop.Areas.Admin.Models.DataModel
 
 <div class="discounts-product-right">
+    @{ 
+        ProductDetail productDetail = Model.ProductDetails.OrderBy(r => r.Price).FirstOrDefault();
+    }
     @if (Model.Sale > 0)
     {
         <div class="sale-box text-center">
@@ -9,10 +12,9 @@
                 -@Model.Sale%
             </span>
         </div>
-
         <div class="discounts-product-image">
-            <a href="@Url.Action("Details", "Product", new { id = Model.ProductId })">
-                <img src="~/Areas/Admin/Content/Images/Product/@Model.Image" alt=@Model.ProductName class="img-responsive">
+            <a href="@Url.Action("Details", "Product", new { id = productDetail.ProductDetailId })">
+                <img src="~/Areas/Admin/Content/Images/ProductImages/@Model.Image" alt=@Model.ProductName class="img-responsive">
             </a>
 
             <div class="price-box">
@@ -24,13 +26,13 @@
                 {
                     <span class="price">
                         @{
-                            int price = (int)Model.Price;
+                            int price = (int)productDetail.Price;
                             price = price - (price * (int)Model.Sale / 100);
                             @price
                         }₫
                     </span>
                     <span class="price-compare">
-                        @Model.Price₫
+                        @productDetail.Price₫
                     </span>
                 }
             </div>
@@ -39,10 +41,10 @@
     else
     {
         <div class="discounts-product-image">
-            <a href="@Url.Action("Details", "Product", new { id = Model.ProductId })">
-                <img src="~/Areas/Admin/Content/Images/Product/@Model.Image" alt=@Model.ProductName class="img-responsive">
+            <a href="@Url.Action("Details", "Product", new { id = productDetail.ProductDetailId })">
+                <img src="~/Areas/Admin/Content/Images/ProductImages/@Model.Image" alt=@Model.ProductName class="img-responsive">
             </a>
-
+            
             <div class="price-box">
                 @if (Model.Qty <= 0)
                 {
@@ -51,7 +53,7 @@
                 else
                 {
                     <span class="price">
-                        @Model.Price₫
+                        @productDetail.Price₫
                     </span>
                 }
             </div>
@@ -60,7 +62,7 @@
 
     <div class="discounts-product-info">
         <h3 class="item-title">
-            <a href="@Url.Action("Details", "Product", new { id = Model.ProductId })" title="@Model.ProductName">@Model.ProductName</a>
+            <a href="@Url.Action("Details", "Product", new { id = productDetail.ProductDetailId })" title="@Model.ProductName">@Model.ProductName</a>
         </h3>
     </div>
 
@@ -71,7 +73,7 @@
         }
         else
         {
-            <button class="button btn-cart btn-more product-atc" title="Mua hàng" type="button" onclick="window.location.href='@Url.Action("Details", "Product", new { id = Model.ProductId })'"><span><img src="~/Images/btn-buy.png" alt=""></span></button>
+            <button class="button btn-cart btn-more product-atc" title="Mua hàng" type="button" onclick="window.location.href='@Url.Action("Details", "Product", new { id = productDetail.ProductDetailId })'"><span><img src="~/Images/btn-buy.png" alt=""></span></button>
         }
     </div>
 </div>

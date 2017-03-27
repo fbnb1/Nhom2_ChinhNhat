@@ -71,7 +71,7 @@ namespace KidShop.Areas.Admin.Controllers
             {
                 db.Entry(account).State = EntityState.Modified;
                 var entry = db.Entry(account);
-                entry.Property(e => e.Username).IsModified = false;
+                entry.Property(e => e.Email).IsModified = false;
                 entry.Property(e => e.Password).IsModified = false;
                 if (account.Avatar == null)
                 {

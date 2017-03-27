@@ -53,12 +53,13 @@ namespace KidShop.Areas.Admin.Controllers
                         return View();
                     }
                     Session["UserId"] = rs_user.UserId;
-                    Session["Username"] = rs_user.Username;
-                    Session["FullName"] = rs_user.FullName;
                     Session["Avatar"] = rs_user.Avatar;
                     return RedirectToAction("Index", "Product");
                 }
             }
+            Session["UserId"] = rs_user.UserId;
+            Session["Avatar"] = rs_user.Avatar;
+            return RedirectToAction("Index", "Product");
         }
 
         public ActionResult Logout()
@@ -84,20 +85,20 @@ namespace KidShop.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                Account temp = new Account()
-                {
-                    Username = acc.Username,
-                    Password = Common.EncryptMD5(acc.Username + acc.Password),
-                    Email = acc.Email,
-                    FullName = acc.FullName,
-                    Avatar = "avatardefault.jpg",
-                    isAdmin = false,
-                    Allowed = true
-                };
-                db.Account.Add(temp);
-                db.SaveChanges();
-                TempData["RegisterSuccess"] = "Đăng ký thành công. Vui lòng đăng nhập để tiếp tục!";
-                return RedirectToAction("Login", "Account");
+                //Account temp = new Account()
+                //{
+                //    Username = acc.Username,
+                //    Password = Common.EncryptMD5(acc.Username + acc.Password),
+                //    Email = acc.Email,
+                //    FullName = acc.FullName,
+                //    Avatar = "avatardefault.jpg",
+                //    isAdmin = false,
+                //    Allowed = true
+                //};
+                //db.Account.Add(temp);
+                //db.SaveChanges();
+                //TempData["RegisterSuccess"] = "Đăng ký thành công. Vui lòng đăng nhập để tiếp tục!";
+                //return RedirectToAction("Login", "Account");
             }
             return View(acc);
         }

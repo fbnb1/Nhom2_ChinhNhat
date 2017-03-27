@@ -31,6 +31,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -116,6 +117,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Admin\Content\Images\Slider\slideshow_image_1.jpg" />
+    <Content Include="Areas\Admin\Content\Images\Slider\slideshow_image_2.jpg" />
+    <Content Include="Areas\Admin\Content\Images\Slider\slideshow_image_3.jpg" />
     <Content Include="Areas\Admin\Content\Vendors\admin-template\custom.js" />
     <Content Include="Areas\Admin\Content\Vendors\admin-template\custom.min.css" />
     <Content Include="Areas\Admin\Content\Vendors\admin-template\custom.min.js" />
@@ -578,6 +582,7 @@
     <Compile Include="Areas\Admin\Models\BusinessModel\Common.cs" />
     <Compile Include="Areas\Admin\Models\BusinessModel\ConvertToAlias.cs" />
     <Compile Include="Areas\Admin\Models\BusinessModel\GetCategory.cs" />
+    <Compile Include="Areas\Admin\Models\BusinessModel\ShoppingCart.cs" />
     <Compile Include="Areas\Admin\Models\BusinessModel\Validations.cs" />
     <Compile Include="Areas\Admin\Models\DataModel\Account.cs" />
     <Compile Include="Areas\Admin\Models\DataModel\Cart.cs" />
@@ -587,16 +592,23 @@
     <Compile Include="Areas\Admin\Models\DataModel\Product.cs" />
     <Compile Include="Areas\Admin\Models\DataModel\ProductDetail.cs" />
     <Compile Include="Areas\Admin\Models\DataModel\ProductImage.cs" />
+    <Compile Include="Areas\Admin\Models\DataModel\Slider.cs" />
     <Compile Include="Areas\Admin\Models\ViewModel\AccountViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ViewModel\BigViewModel.cs" />
-    <Compile Include="Controllers\AccountsController.cs" />
+    <Compile Include="Areas\Admin\Models\ViewModel\ColorSizeViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ViewModel\ShoppingCartRemoveViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ViewModel\ShoppingCartViewModel.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CheckoutController.cs" />
     <Compile Include="Controllers\Common.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\RegisterViewModel.cs" />
+    <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -633,7 +645,6 @@
     <Content Include="Areas\Admin\Content\Vendors\font-awesome\fonts\FontAwesome.otf" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Accounts\Index.cshtml" />
     <Content Include="Views\Shared\_PartialLogin.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\PartialMenu.cshtml" />
@@ -645,6 +656,23 @@
     <Content Include="Views\Product\PartialCategory.cshtml" />
     <Content Include="Views\Product\PartialProductImage.cshtml" />
     <Content Include="Views\Product\PartialProduct.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\ShoppingCart\Index.cshtml" />
+    <Content Include="Views\Oder\Index.cshtml" />
+    <Content Include="Views\Oder\Details.cshtml" />
+    <Content Include="Views\Oder\Create.cshtml" />
+    <Content Include="Views\Oder\Edit.cshtml" />
+    <Content Include="Views\Oder\Delete.cshtml" />
+    <Content Include="Views\Checkout\AddressAndPayment.cshtml" />
+    <Content Include="Views\Checkout\Complete.cshtml" />
+    <Content Include="Views\ShoppingCart\CartSummary.cshtml" />
+    <Content Include="Views\Product\ProductList.cshtml" />
+    <Content Include="Views\Checkout\View.cshtml" />
+    <Content Include="Views\Home\PartialTopOrder.cshtml" />
+    <Content Include="Views\Home\PartialSlider.cshtml" />
+    <Content Include="Views\Home\PartialHotProduct.cshtml" />
+    <Content Include="Views\Home\PartialHotNews.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

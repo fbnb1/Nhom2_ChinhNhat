@@ -6,15 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-<<<<<<< HEAD
 using System.IO;
 using KidShop.Areas.Admin.Models.DataModel;
 using KidShop.Areas.Admin.Models.BusinessModel;
-=======
-using KidShop.Areas.Admin.Models.DataModel;
-using KidShop.Areas.Admin.Models.BusinessModel;
-using System.IO;
->>>>>>> origin/master
 using KidShop.Areas.Admin.Models.ViewModel;
 
 namespace KidShop.Areas.Admin.Controllers
@@ -125,7 +119,7 @@ namespace KidShop.Areas.Admin.Controllers
                                 Color = tags_color[i],
                                 Size = tags_size[j],
                                 Qty = (Request.Form["qty_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null) ? Int16.Parse(Request.Form["qty_detail[" + tags_color[i] + "-" + tags_size[j] + "]"]) : 0,
-                                Price = (Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null) ? Double.Parse(Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"]) : 0
+                                Price = (Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null) ? Decimal.Parse(Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"]) : 0
                             });
                         }
                     }
@@ -211,7 +205,7 @@ namespace KidShop.Areas.Admin.Controllers
                                 Color = tags_color[i],
                                 Size = tags_size[j],
                                 Qty = (Request.Form["qty_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null) ? Int16.Parse(Request.Form["qty_detail[" + tags_color[i] + "-" + tags_size[j] + "]"]) : 0,
-                                Price = (Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null) ? Double.Parse(Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"]) : 0
+                                Price = (Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"] != null) ? Decimal.Parse(Request.Form["price_detail[" + tags_color[i] + "-" + tags_size[j] + "]"]) : 0
                             });
                         }
                     }
