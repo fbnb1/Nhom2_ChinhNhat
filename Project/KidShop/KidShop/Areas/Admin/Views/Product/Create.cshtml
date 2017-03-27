@@ -1,15 +1,5 @@
 ﻿@model KidShop.Areas.Admin.Models.DataModel.Product
-<<<<<<< HEAD
 
-
-=======
-@{
-    var model2 = new KidShop.Areas.Admin.Models.DataModel.ProductDetail();
-    model2.Price = 25;
-    model2.ProductId = 1;
-    model2.Size = "XL";
-}
->>>>>>> origin/master
 <p>
     @Html.ActionLink("Danh sách sản phẩm", "Index", "Product", new { }, new { @class = "btn btn-primary  btn-sm" })
 </p>
@@ -203,7 +193,7 @@
         paramName: "file",
         maxFilesize: 2,
         maxFiles: 8,
-        url: "/Product/UploadFile",
+        url: "/Admin/Product/UploadFile",
         acceptedFiles: "image/*",
         init: function () {
             this.on("maxfilesexceeded", function (file) {

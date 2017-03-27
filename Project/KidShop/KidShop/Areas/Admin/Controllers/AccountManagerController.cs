@@ -36,10 +36,11 @@ namespace KidShop.Areas.Admin.Controllers
             }
 
             Account acc = new Account() {
-                FirstName = account.Username,
+                Username = account.Username,
                 Password = Common.EncryptMD5(account.Username + account.Password),
+                FullName = account.FullName,
                 Email = account.Email,
-                //Role = account.,
+                isAdmin = account.IsAdmin,
                 Allowed = account.Allowed,
                 Avatar = "avatardefault.jpg"
             };

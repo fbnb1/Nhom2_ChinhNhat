@@ -1,5 +1,4 @@
 ﻿@model List<KidShop.Areas.Admin.Models.DataModel.Category>
-@using KidShop.Areas.Admin.Models.DataModel
 <section class="sk-home-main-block sk-tab-product">
     <div class="main-block-title pink-title">
         <h2>
@@ -28,10 +27,80 @@
                 if (i == 1)
                 {
                     <div class="tab-pane active" id="1">
-                        @foreach (Product item in ViewBag.listProduct[0])
+                        @foreach (var item in ViewBag.listProduct[0])
                         {
                             <div class="col-md-3 col-sm-6 col-xs-12">
-                                @Html.Partial("~/Views/Product/PartialProduct.cshtml", item)
+                                <div class="discounts-product-right">
+                                    @if (item.Sale > 0)
+                                    {
+                                        <div class="sale-box text-center">
+                                            <span class="price">
+                                                @{int sale = (int)((item.Price - item.Sale) / item.Price * 100);}
+                                                -@sale%
+                                            </span>
+                                        </div>
+
+                                        <div class="discounts-product-image">
+                                            <a href="@Url.Action("Details", "Product", new { id = item.ProductId })">
+                                                <img src="~/Areas/Admin/Content/Images/Product/@item.Image" alt=@item.ProductName class="img-responsive">
+                                            </a>
+
+                                            <div class="price-box">
+                                                @if (item.Qty <= 0)
+                                                {
+                                                    <span class="price">Hết hàng</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="price">
+                                                        @item.Sale₫
+                                                    </span>
+                                                    <span class="price-compare">
+                                                        @item.Price₫
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="discounts-product-image">
+                                            <a href="@Url.Action("Details", "Product", new { id = item.ProductId })">
+                                                <img src="~/Areas/Admin/Content/Images/ProductImages/@item.Image" alt=@item.ProductName class="img-responsive">
+                                            </a>
+
+                                            <div class="price-box">
+                                                @if (item.Qty <= 0)
+                                                {
+                                                    <span class="price">Hết hàng</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="price">
+                                                        @item.Price₫
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <div class="discounts-product-info">
+                                        <h3 class="item-title">
+                                            <a href="@Url.Action("Details", "Product", new { id = item.ProductId })" title="@item.ProductName">@item.ProductName</a>
+                                        </h3>
+                                    </div>
+
+                                    <div class="text-center">
+                                        @if (item.Qty <= 0)
+                                        {
+                                            <button disabled="disabled" class="button btn-cart btn-buy product-atc" title="Cho vào giỏ hàng"><span>Hết hàng</span></button>
+                                        }
+                                        else
+                                        {
+                                            <button class="button btn-cart btn-more product-atc" title="Mua hàng" type="button" onclick="window.location.href='@Url.Action("Details", "Product", new { id = item.ProductId })'"><span><img src="~/Images/btn-buy.png" alt=""></span></button>
+                                        }
+                                    </div>
+                                </div>
                             </div>
                         }
                     </div>
@@ -39,10 +108,80 @@
                 else
                 {
                     <div class="tab-pane" id="@i">
-                        @foreach (Product item in ViewBag.listProduct[i-1])
+                        @foreach (var item in ViewBag.listProduct[i-1])
                         {
                             <div class="col-md-3 col-sm-6 col-xs-12">
-                                @Html.Partial("~/Views/Product/PartialProduct.cshtml", item)
+                                <div class="discounts-product-right">
+                                    @if (item.Sale > 0)
+                                    {
+                                        <div class="sale-box text-center">
+                                            <span class="price">
+                                                @{int sale = (int)((item.Price - item.Sale) / item.Price * 100);}
+                                                -@sale%
+                                            </span>
+                                        </div>
+
+                                        <div class="discounts-product-image">
+                                            <a href="@Url.Action("Details", "Product", new { id = item.ProductId })">
+                                                <img src="~/Areas/Admin/Content/Images/Product/@item.Image" alt=@item.ProductName class="img-responsive">
+                                            </a>
+
+                                            <div class="price-box">
+                                                @if (item.Qty <= 0)
+                                                {
+                                                    <span class="price">Hết hàng</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="price">
+                                                        @item.Sale₫
+                                                    </span>
+                                                    <span class="price-compare">
+                                                        @item.Price₫
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="discounts-product-image">
+                                            <a href="@Url.Action("Details", "Product", new { id = item.ProductId })">
+                                                <img src="~/Areas/Admin/Content/Images/Product/@item.Image" alt=@item.ProductName class="img-responsive">
+                                            </a>
+
+                                            <div class="price-box">
+                                                @if (item.Qty <= 0)
+                                                {
+                                                    <span class="price">Hết hàng</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="price">
+                                                        @item.Price₫
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <div class="discounts-product-info">
+                                        <h3 class="item-title">
+                                            <a href="@Url.Action("Details", "Product", new { id = item.ProductId })" title="@item.ProductName">@item.ProductName</a>
+                                        </h3>
+                                    </div>
+
+                                    <div class="text-center">
+                                        @if (item.Qty <= 0)
+                                        {
+                                            <button disabled="disabled" class="button btn-cart btn-buy product-atc" title="Cho vào giỏ hàng"><span>Hết hàng</span></button>
+                                        }
+                                        else
+                                        {
+                                            <button class="button btn-cart btn-more product-atc" title="Mua hàng" type="button" onclick="window.location.href='@Url.Action("Details", "Product", new { id = item.ProductId })'"><span><img src="~/Images/btn-buy.png" alt=""></span></button>
+                                        }
+                                    </div>
+                                </div>
                             </div>
                         }
                     </div>
